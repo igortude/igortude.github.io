@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Files Cosmic Gateway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Electrolize&display=swap');
+        
+        body {
+            font-family: 'Electrolize', sans-serif;
+            background-color: #000;
+            color: #0af;
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        .terminal-text {
+            position: relative;
+        }
+        
+        .terminal-text::after {
+            content: "|";
+            position: absolute;
+            right: -5px;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        .nebula {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(20, 10, 80, 0.8) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(80, 10, 40, 0.6) 0%, transparent 50%);
+            z-index: -1;
+            opacity: 0.5;
+        }
+        
+        .wormhole {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, #0af 0%, #0066ff 50%, transparent 70%);
+            box-shadow: 0 0 60px #0af;
+            z-index: 10;
+            transition: all 2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .alien-text {
+            text-shadow: 0 0 10px #0af, 0 0 20px #0af;
+        }
+        
+        .fade-in {
+            animation: fadeIn 2s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .hidden-content {
+            display: none;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .terminal-line {
+            opacity: 0;
+            animation: appear 0.5s forwards;
+        }
+        
+        @keyframes appear {
+            to { opacity: 1; }
+        }
+        
+        .speed-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, transparent 0%, rgba(0, 170, 255, 0.1) 50%, transparent 100%);
+            background-size: 100% 20px;
+            animation: speedEffect 0.2s infinite linear;
+            z-index: 5;
+            display: none;
+        }
+        
+        @keyframes speedEffect {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 20px; }
+        }
+    </style>
+</head>
+<body class="bg-black text-blue-400">
+    <div class="stars" id="stars"></div>
+    <div class="nebula"></div>
+    <div class="speed-lines" id="speed-lines"></div>
+    <div class="wormhole" id="wormhole"></div>
+    
+    <!-- Initial X-Files Terminal -->
+    <div id="xfiles-terminal" class="w-full h-screen flex flex-col justify-center items-center p-4">
+        <div class="w-full max-w-3xl mx-auto">
+            <div class="mb-8 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold font-orbitron alien-text">
+                    <i class="fas fa-satellite-dish mr-2"></i> X-FILES COSMIC GATEWAY
+                </h1>
+                <p class="mt-2 text-blue-300">CLASSIFIED ACCESS - LEVEL OMEGA</p>
+            </div>
+            
+            <div id="terminal-output" class="mb-6 h-64 overflow-y-auto bg-black bg-opacity-70 p-4 rounded border border-blue-500">
+                <div class="terminal-line" style="animation-delay: 1s;">> Initializing FTL communication array...</div>
+                <div class="terminal-line" style="animation-delay: 1.5s;">> Scanning for extraterrestrial signals...</div>
+                <div class="terminal-line" style="animation-delay: 2s;">> Connecting to EVE Quantum Network...</div>
+                <div class="terminal-line" style="animation-delay: 2.5s;">> Accessing Ancient Alien Database...</div>
+                <div class="terminal-line" style="animation-delay: 3s;">> WARNING: Unidentified signal detected.</div>
+                <div class="terminal-line" style="animation-delay: 3.5s;">> The truth is out there.</div>
+                <div class="terminal-line" style="animation-delay: 4s;">> Trust no one.</div>
+                <div class="terminal-line" style="animation-delay: 4.5s;">> Prepare for wormhole transit.</div>
+            </div>
+            
+            <div id="login-form" class="opacity-0 fade-in" style="animation-delay: 5s;">
+                <div class="mb-4">
+                    <label class="block mb-2 text-blue-300">PILOT IDENTIFICATION:</label>
+                    <input type="text" id="username" class="w-full bg-black border-b border-blue-500 focus:outline-none py-2 px-1 terminal-text text-blue-400" autocomplete="off" placeholder="Enter your callsign">
+                </div>
+                <div class="flex justify-between items-center">
+                    <button id="transit-btn" class="bg-blue-900 hover:bg-blue-800 text-blue-100 py-2 px-6 rounded border border-blue-500 pulse">
+                        <i class="fas fa-rocket mr-2"></i> INITIATE WORMHOLE TRANSIT
+                    </button>
+                    <div class="text-blue-300 text-sm">
+                        <i class="fas fa-info-circle mr-1"></i> Destination: github.com/igortude
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Transit Sequence -->
+    <div id="transit-sequence" class="hidden-content w-full h-screen flex flex-col justify-center items-center p-4 text-center">
+        <h1 class="text-5xl md:text-7xl font-bold mb-8 font-orbitron alien-text" id="transit-text">
+            ENGAGING WORMHOLE DRIVE
+        </h1>
+        <div class="w-full max-w-2xl mx-auto">
+            <div class="grid grid-cols-5 gap-4 mb-8" id="alien-symbols">
+                <!-- Alien symbols will be added by JS -->
+            </div>
+            <div class="text-xl text-blue-300" id="countdown">
+                Quantum stabilization in progress...
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create starfield
+            const starsContainer = document.getElementById('stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = (Math.random() * 3) + 'px';
+                star.style.height = star.style.width;
+                star.style.left = (Math.random() * 100) + '%';
+                star.style.top = (Math.random() * 100) + '%';
+                star.style.opacity = Math.random();
+                star.style.animationDelay = (Math.random() * 5) + 's';
+                star.style.animationDuration = (2 + Math.random() * 8) + 's';
+                starsContainer.appendChild(star);
+            }
+            
+            // Create alien symbols
+            const alienSymbols = ['👽', '🛸', '☄️', '🌌', '🚀', '👾', '🔭', '🌀', '⚛️', '🔮'];
+            const symbolsContainer = document.getElementById('alien-symbols');
+            
+            for (let i = 0; i < 15; i++) {
+                const symbol = document.createElement('div');
+                symbol.className = 'text-4xl opacity-0';
+                symbol.style.animationDelay = (i * 0.2) + 's';
+                symbol.style.animationDuration = '0.5s';
+                symbol.style.animationFillMode = 'forwards';
+                symbol.style.animationName = 'appear';
+                symbol.textContent = alienSymbols[Math.floor(Math.random() * alienSymbols.length)];
+                symbolsContainer.appendChild(symbol);
+            }
+            
+            // Show login form after terminal lines appear
+            setTimeout(() => {
+                document.getElementById('login-form').style.opacity = '1';
+            }, 5000);
+            
+            // Wormhole transit button
+            document.getElementById('transit-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('username').value.trim();
+                
+                if (!username) {
+                    const terminalOutput = document.getElementById('terminal-output');
+                    terminalOutput.innerHTML += `<div>> ERROR: Pilot identification required for transit.</div>`;
+                    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+                    return;
+                }
+                
+                // Start transit sequence
+                document.getElementById('xfiles-terminal').style.display = 'none';
+                document.getElementById('transit-sequence').style.display = 'flex';
+                
+                // Activate wormhole effect
+                const wormhole = document.getElementById('wormhole');
+                wormhole.style.width = '100vw';
+                wormhole.style.height = '100vh';
+                wormhole.style.opacity = '0.9';
+                
+                // Show speed lines
+                document.getElementById('speed-lines').style.display = 'block';
+                
+                // Update transit text
+                const transitText = document.getElementById('transit-text');
+                const messages = [
+                    `WELCOME, ${username.toUpperCase()}`,
+                    "ENTERING WORMHOLE SPACE",
+                    "QUANTUM STABILIZATION 50%",
+                    "ALIEN ARTIFACTS DETECTED",
+                    "APPROACHING DESTINATION",
+                    "GITHUB PORTAL ENGAGED"
+                ];
+                
+                let currentMessage = 0;
+                const messageInterval = setInterval(() => {
+                    transitText.textContent = messages[currentMessage];
+                    currentMessage++;
+                    
+                    if (currentMessage >= messages.length) {
+                        clearInterval(messageInterval);
+                        
+                        // Countdown to redirect
+                        let countdown = 3;
+                        const countdownElement = document.getElementById('countdown');
+                        const countdownInterval = setInterval(() => {
+                            countdownElement.textContent = `Redirecting to github.com/igortude in ${countdown}...`;
+                            countdown--;
+                            
+                            if (countdown < 0) {
+                                clearInterval(countdownInterval);
+                                window.location.href = "https://github.com/igortude";
+                            }
+                        }, 1000);
+                    }
+                }, 800);
+            });
+            
+            // Make terminal inputs have the typing cursor effect
+            const inputs = document.querySelectorAll('.terminal-text');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.classList.add('terminal-text');
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.classList.remove('terminal-text');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X-Files Cosmic Gateway</title>
+    <title>iTude C0des Gateway</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -15,6 +15,8 @@
             color: #0af;
             overflow: hidden;
             height: 100vh;
+            margin: 0;
+            padding: 0;
         }
         
         .terminal-text {
@@ -66,20 +68,6 @@
             opacity: 0.5;
         }
         
-        .wormhole {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: radial-gradient(circle, #0af 0%, #0066ff 50%, transparent 70%);
-            box-shadow: 0 0 60px #0af;
-            z-index: 10;
-            transition: all 2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
         .alien-text {
             text-shadow: 0 0 10px #0af, 0 0 20px #0af;
         }
@@ -115,37 +103,115 @@
             to { opacity: 1; }
         }
         
-        .speed-lines {
+        /* Efeito de light-speed travel com estrelas */
+        .light-speed {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(0deg, transparent 0%, rgba(0, 170, 255, 0.1) 50%, transparent 100%);
-            background-size: 100% 20px;
-            animation: speedEffect 0.2s infinite linear;
-            z-index: 5;
+            background: #000;
+            z-index: 10;
             display: none;
+            overflow: hidden;
+            perspective: 1000px;
         }
         
-        @keyframes speedEffect {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 20px; }
+        .light-speed-tunnel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+        
+        .travel-star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            transform-origin: 50% 50%;
+            animation: starTravel linear forwards;
+        }
+        
+        @keyframes starTravel {
+            0% { 
+                transform: translate3d(0, 0, 1000px) scale(0.1);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translate3d(0, 0, -1000px) scale(5);
+                opacity: 0;
+            }
+        }
+        
+        .destination {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            color: white;
+            font-size: 2rem;
+            text-align: center;
+            text-shadow: 0 0 10px #0af;
+            opacity: 0;
+            font-family: 'Orbitron', sans-serif;
+            animation: destinationAppear 2s 3s forwards;
+        }
+        
+        @keyframes destinationAppear {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        .transit-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            color: white;
+            font-size: 2rem;
+            text-align: center;
+            text-shadow: 0 0 10px #0af;
+            opacity: 0;
+            animation: messageFade 2s forwards;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        @keyframes messageFade {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(2); }
         }
     </style>
 </head>
 <body class="bg-black text-blue-400">
     <div class="stars" id="stars"></div>
     <div class="nebula"></div>
-    <div class="speed-lines" id="speed-lines"></div>
-    <div class="wormhole" id="wormhole"></div>
+    
+    <!-- Efeito de light-speed travel com estrelas -->
+    <div class="light-speed" id="light-speed">
+        <div class="light-speed-tunnel" id="light-speed-tunnel">
+            <!-- Estrelas serão adicionadas por JavaScript -->
+        </div>
+        <div class="destination" id="destination">
+            <i class="fab fa-github fa-3x mb-4"></i>
+            <h2>github.com/igortude</h2>
+            <p class="text-sm mt-2">Destination reached</p>
+        </div>
+    </div>
     
     <!-- Initial X-Files Terminal -->
     <div id="xfiles-terminal" class="w-full h-screen flex flex-col justify-center items-center p-4">
         <div class="w-full max-w-3xl mx-auto">
             <div class="mb-8 text-center">
                 <h1 class="text-4xl md:text-6xl font-bold font-orbitron alien-text">
-                    <i class="fas fa-satellite-dish mr-2"></i> X-FILES COSMIC GATEWAY
+                    <i class="fas fa-satellite-dish mr-2"></i> iTude C0des GATEWAY
                 </h1>
                 <p class="mt-2 text-blue-300">CLASSIFIED ACCESS - LEVEL OMEGA</p>
             </div>
@@ -157,18 +223,17 @@
                 <div class="terminal-line" style="animation-delay: 2.5s;">> Accessing Ancient Alien Database...</div>
                 <div class="terminal-line" style="animation-delay: 3s;">> WARNING: Unidentified signal detected.</div>
                 <div class="terminal-line" style="animation-delay: 3.5s;">> The truth is out there.</div>
-                <div class="terminal-line" style="animation-delay: 4s;">> Trust no one.</div>
-                <div class="terminal-line" style="animation-delay: 4.5s;">> Prepare for wormhole transit.</div>
+                <div class="terminal-line" style="animation-delay: 4.5s;">> Prepare for light-speed transit.</div>
             </div>
             
             <div id="login-form" class="opacity-0 fade-in" style="animation-delay: 5s;">
                 <div class="mb-4">
-                    <label class="block mb-2 text-blue-300">PILOT IDENTIFICATION:</label>
-                    <input type="text" id="username" class="w-full bg-black border-b border-blue-500 focus:outline-none py-2 px-1 terminal-text text-blue-400" autocomplete="off" placeholder="Enter your callsign">
+                    <label class="block mb-2 text-blue-300">IDENTIFICATION:</label>
+                    <input type="text" id="username" class="w-full bg-black border-b border-blue-500 focus:outline-none py-2 px-1 terminal-text text-blue-400" autocomplete="off" placeholder="Enter your sign">
                 </div>
                 <div class="flex justify-between items-center">
                     <button id="transit-btn" class="bg-blue-900 hover:bg-blue-800 text-blue-100 py-2 px-6 rounded border border-blue-500 pulse">
-                        <i class="fas fa-rocket mr-2"></i> INITIATE WORMHOLE TRANSIT
+                        <i class="fas fa-rocket mr-2"></i> INITIATE LIGHT-SPEED TRANSIT
                     </button>
                     <div class="text-blue-300 text-sm">
                         <i class="fas fa-info-circle mr-1"></i> Destination: github.com/igortude
@@ -178,24 +243,9 @@
         </div>
     </div>
     
-    <!-- Transit Sequence -->
-    <div id="transit-sequence" class="hidden-content w-full h-screen flex flex-col justify-center items-center p-4 text-center">
-        <h1 class="text-5xl md:text-7xl font-bold mb-8 font-orbitron alien-text" id="transit-text">
-            ENGAGING WORMHOLE DRIVE
-        </h1>
-        <div class="w-full max-w-2xl mx-auto">
-            <div class="grid grid-cols-5 gap-4 mb-8" id="alien-symbols">
-                <!-- Alien symbols will be added by JS -->
-            </div>
-            <div class="text-xl text-blue-300" id="countdown">
-                Quantum stabilization in progress...
-            </div>
-        </div>
-    </div>
-    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Create starfield
+            // Create starfield background
             const starsContainer = document.getElementById('stars');
             const starCount = 200;
             
@@ -212,27 +262,12 @@
                 starsContainer.appendChild(star);
             }
             
-            // Create alien symbols
-            const alienSymbols = ['👽', '🛸', '☄️', '🌌', '🚀', '👾', '🔭', '🌀', '⚛️', '🔮'];
-            const symbolsContainer = document.getElementById('alien-symbols');
-            
-            for (let i = 0; i < 15; i++) {
-                const symbol = document.createElement('div');
-                symbol.className = 'text-4xl opacity-0';
-                symbol.style.animationDelay = (i * 0.2) + 's';
-                symbol.style.animationDuration = '0.5s';
-                symbol.style.animationFillMode = 'forwards';
-                symbol.style.animationName = 'appear';
-                symbol.textContent = alienSymbols[Math.floor(Math.random() * alienSymbols.length)];
-                symbolsContainer.appendChild(symbol);
-            }
-            
             // Show login form after terminal lines appear
             setTimeout(() => {
                 document.getElementById('login-form').style.opacity = '1';
             }, 5000);
             
-            // Wormhole transit button
+            // Light-speed transit button
             document.getElementById('transit-btn').addEventListener('click', function(e) {
                 e.preventDefault();
                 const username = document.getElementById('username').value.trim();
@@ -246,50 +281,109 @@
                 
                 // Start transit sequence
                 document.getElementById('xfiles-terminal').style.display = 'none';
-                document.getElementById('transit-sequence').style.display = 'flex';
+                const lightSpeed = document.getElementById('light-speed');
+                lightSpeed.style.display = 'block';
                 
-                // Activate wormhole effect
-                const wormhole = document.getElementById('wormhole');
-                wormhole.style.width = '100vw';
-                wormhole.style.height = '100vh';
-                wormhole.style.opacity = '0.9';
+                const tunnel = document.getElementById('light-speed-tunnel');
                 
-                // Show speed lines
-                document.getElementById('speed-lines').style.display = 'block';
+                // Create traveling stars for warp speed effect
+                function createTravelingStars() {
+                    const starCount = 200;
+                    const colors = ['#fff', '#0af', '#0ff', '#aaf'];
+                    
+                    for (let i = 0; i < starCount; i++) {
+                        const star = document.createElement('div');
+                        star.className = 'travel-star';
+                        
+                        // Random size
+                        const size = Math.random() * 4 + 1;
+                        star.style.width = `${size}px`;
+                        star.style.height = `${size}px`;
+                        
+                        // Random position
+                        star.style.left = `${Math.random() * 100}%`;
+                        star.style.top = `${Math.random() * 100}%`;
+                        
+                        // Random color
+                        star.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        
+                        // Random animation duration and delay
+                        const duration = 1 + Math.random() * 2;
+                        const delay = Math.random() * 3;
+                        star.style.animationDuration = `${duration}s`;
+                        star.style.animationDelay = `${delay}s`;
+                        
+                        tunnel.appendChild(star);
+                    }
+                    
+                    // Keep adding new stars periodically for continuous effect
+                    const starInterval = setInterval(() => {
+                        const star = document.createElement('div');
+                        star.className = 'travel-star';
+                        
+                        const size = Math.random() * 4 + 1;
+                        star.style.width = `${size}px`;
+                        star.style.height = `${size}px`;
+                        star.style.left = `${Math.random() * 100}%`;
+                        star.style.top = `${Math.random() * 100}%`;
+                        star.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        
+                        const duration = 1 + Math.random() * 2;
+                        star.style.animationDuration = `${duration}s`;
+                        
+                        tunnel.appendChild(star);
+                        
+                        // Remove star after animation completes
+                        setTimeout(() => {
+                            star.remove();
+                        }, duration * 1000);
+                    }, 50);
+                    
+                    // Stop creating stars after 3 seconds
+                    setTimeout(() => {
+                        clearInterval(starInterval);
+                    }, 3000);
+                }
                 
-                // Update transit text
-                const transitText = document.getElementById('transit-text');
+                createTravelingStars();
+                
+                // Show transit messages
                 const messages = [
-                    `WELCOME, ${username.toUpperCase()}`,
-                    "ENTERING WORMHOLE SPACE",
-                    "QUANTUM STABILIZATION 50%",
-                    "ALIEN ARTIFACTS DETECTED",
-                    "APPROACHING DESTINATION",
-                    "GITHUB PORTAL ENGAGED"
+                    `ENGAGING LIGHT-SPEED DRIVE, ${username.toUpperCase()}`,
+                    "ACCELERATING TO WARP VELOCITY",
+                    "TRAVELING THROUGH HYPERSPACE",
+                    "APPROACHING DESTINATION"
                 ];
                 
                 let currentMessage = 0;
-                const messageInterval = setInterval(() => {
-                    transitText.textContent = messages[currentMessage];
-                    currentMessage++;
-                    
+                const showMessage = () => {
                     if (currentMessage >= messages.length) {
-                        clearInterval(messageInterval);
+                        // Show destination
+                        document.getElementById('destination').style.display = 'block';
                         
-                        // Countdown to redirect
-                        let countdown = 3;
-                        const countdownElement = document.getElementById('countdown');
-                        const countdownInterval = setInterval(() => {
-                            countdownElement.textContent = `Redirecting to github.com/igortude in ${countdown}...`;
-                            countdown--;
-                            
-                            if (countdown < 0) {
-                                clearInterval(countdownInterval);
-                                window.location.href = "https://github.com/igortude";
-                            }
-                        }, 1000);
+                        // Redirect after animation completes
+                        setTimeout(() => {
+                            window.location.href = "https://github.com/igortude";
+                        }, 3000);
+                        return;
                     }
-                }, 800);
+                    
+                    const message = document.createElement('div');
+                    message.className = 'transit-message';
+                    message.textContent = messages[currentMessage];
+                    message.style.animationDelay = `${currentMessage * 0.5}s`;
+                    document.body.appendChild(message);
+                    
+                    // Remove message after animation
+                    setTimeout(() => {
+                        message.remove();
+                    }, 2000);
+                    
+                    currentMessage++;
+                    setTimeout(showMessage, 1000);
+                };
+                
+                showMessage();
             });
             
             // Make terminal inputs have the typing cursor effect

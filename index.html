@@ -1,402 +1,935 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iTude C0des Gateway</title>
+    <title>Data Science Portfolio | ML & Deep Learning</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Electrolize&display=swap');
-        
-        body {
-            font-family: 'Electrolize', sans-serif;
-            background-color: #000;
-            color: #0af;
-            overflow: hidden;
-            height: 100vh;
-            margin: 0;
-            padding: 0;
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
         }
         
-        .terminal-text {
-            position: relative;
+        /* Animated Grid Background */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+            animation: grid-move 20s linear infinite;
         }
         
-        .terminal-text::after {
-            content: "|";
-            position: absolute;
-            right: -5px;
-            animation: blink 1s infinite;
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(40px, 40px); }
+        }
+        
+        /* Terminal Glow */
+        .terminal-glow {
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3), 0 0 40px rgba(6, 182, 212, 0.1);
+        }
+        
+        /* Glassmorphism */
+        .glass {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+        
+        .glass-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(6, 182, 212, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(6, 182, 212, 0.3);
+        }
+        
+        /* Typing Cursor */
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
         }
         
         @keyframes blink {
-            0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
         
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
+        /* Pulse Animation */
+        .pulse-dot {
+            animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
         
-        .star {
-            position: absolute;
-            background-color: #fff;
-            border-radius: 50%;
-            animation: twinkle 5s infinite;
-        }
-        
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
-        }
-        
-        .nebula {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 30%, rgba(20, 10, 80, 0.8) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 70%, rgba(80, 10, 40, 0.6) 0%, transparent 50%);
-            z-index: -1;
-            opacity: 0.5;
-        }
-        
-        .alien-text {
-            text-shadow: 0 0 10px #0af, 0 0 20px #0af;
-        }
-        
-        .fade-in {
-            animation: fadeIn 2s;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .hidden-content {
-            display: none;
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
+        @keyframes pulse-dot {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+            50% { opacity: 0.5; }
         }
         
-        .terminal-line {
-            opacity: 0;
-            animation: appear 0.5s forwards;
+        /* Terminal Text Colors */
+        .text-terminal-green { color: #10b981; }
+        .text-terminal-cyan { color: #06b6d4; }
+        .text-terminal-purple { color: #a855f7; }
+        .text-terminal-yellow { color: #eab308; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06b6d4;
         }
         
-        @keyframes appear {
-            to { opacity: 1; }
+        /* Chart Bars Animation */
+        .chart-bar {
+            animation: grow-up 1s ease-out forwards;
+            transform-origin: bottom;
         }
         
-        /* Efeito de light-speed travel com estrelas */
-        .light-speed {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            z-index: 10;
-            display: none;
-            overflow: hidden;
-            perspective: 1000px;
+        @keyframes grow-up {
+            from { transform: scaleY(0); }
+            to { transform: scaleY(1); }
         }
         
-        .light-speed-tunnel {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-        }
-        
-        .travel-star {
-            position: absolute;
-            background-color: #fff;
-            border-radius: 50%;
-            transform-origin: 50% 50%;
-            animation: starTravel linear forwards;
-        }
-        
-        @keyframes starTravel {
-            0% { 
-                transform: translate3d(0, 0, 1000px) scale(0.1);
-                opacity: 0;
-            }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { 
-                transform: translate3d(0, 0, -1000px) scale(5);
-                opacity: 0;
-            }
-        }
-        
-        .destination {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 20;
-            color: white;
-            font-size: 2rem;
-            text-align: center;
-            text-shadow: 0 0 10px #0af;
-            opacity: 0;
-            font-family: 'Orbitron', sans-serif;
-            animation: destinationAppear 2s 3s forwards;
-        }
-        
-        @keyframes destinationAppear {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        }
-        
-        .transit-message {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 20;
-            color: white;
-            font-size: 2rem;
-            text-align: center;
-            text-shadow: 0 0 10px #0af;
-            opacity: 0;
-            animation: messageFade 2s forwards;
-            font-family: 'Orbitron', sans-serif;
-        }
-        
-        @keyframes messageFade {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-            80% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(2); }
+        /* Hover Terminal Trigger */
+        .terminal-trigger {
+            cursor: pointer;
         }
     </style>
 </head>
-<body class="bg-black text-blue-400">
-    <div class="stars" id="stars"></div>
-    <div class="nebula"></div>
-    
-    <!-- Efeito de light-speed travel com estrelas -->
-    <div class="light-speed" id="light-speed">
-        <div class="light-speed-tunnel" id="light-speed-tunnel">
-            <!-- Estrelas serão adicionadas por JavaScript -->
+<body class="bg-slate-950 text-slate-200 overflow-x-hidden bg-grid">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2 font-mono text-cyan-400">
+                    <i data-lucide="terminal" class="w-5 h-5"></i>
+                    <span class="text-sm font-bold">user@datascience:~$</span>
+                    <span class="hidden sm:inline text-slate-500 text-xs">portfolio</span>
+                </div>
+                <div class="hidden md:flex items-center gap-6 text-sm font-medium">
+                    <a href="#dashboard" class="hover:text-cyan-400 transition-colors terminal-trigger" data-cmd="cd ./dashboard">Dashboard</a>
+                    <a href="#repositories" class="hover:text-cyan-400 transition-colors terminal-trigger" data-cmd="git status">Repositórios</a>
+                    <a href="#stack" class="hover:text-cyan-400 transition-colors terminal-trigger" data-cmd="pip list">Tech Stack</a>
+                    <a href="#linkedin" class="hover:text-cyan-400 transition-colors terminal-trigger" data-cmd="curl linkedin.com/in/profile">LinkedIn</a>
+                </div>
+                <button id="mobile-menu-btn" class="md:hidden text-slate-300 hover:text-cyan-400">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
         </div>
-        <div class="destination" id="destination">
-            <i class="fab fa-github fa-3x mb-4"></i>
-            <h2>github.com/igortude</h2>
-            <p class="text-sm mt-2">Destination reached</p>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/50 border border-cyan-800 text-cyan-400 text-xs font-mono mb-6">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 pulse-dot"></span>
+                System Online
+            </div>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+                Ciência de Dados &<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Machine Learning</span>
+            </h1>
+            <p class="text-lg text-slate-400 max-w-xl mb-8">
+                Transformando dados em insights através de Python, SQL e Deep Learning. 
+                Especialista em modelos preditivos, visualização de dados e pipelines de MLOps.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <button class="terminal-trigger px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-medium transition-all flex items-center gap-2" data-cmd="python deploy_model.py">
+                    <i data-lucide="github" class="w-4 h-4"></i>
+                    Ver GitHub
+                </button>
+                <button class="terminal-trigger px-6 py-3 glass hover:border-cyan-400 text-cyan-400 rounded-lg font-medium transition-all flex items-center gap-2" data-cmd="jupyter notebook">
+                    <i data-lucide="linkedin" class="w-4 h-4"></i>
+                    LinkedIn
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fixed Terminal - Always Visible -->
+    <div id="fixed-terminal" class="fixed bottom-4 right-4 w-full max-w-lg z-50 hidden md:block">
+        <div class="absolute -inset-1 bg-gradient-to-r from-cyan-600 to-purple-600 rounded-xl blur opacity-20"></div>
+        <div class="relative glass terminal-glow rounded-xl overflow-hidden border border-slate-700 shadow-2xl">
+            <div class="flex items-center gap-2 px-4 py-3 bg-slate-900/80 border-b border-slate-700">
+                <div class="flex gap-2">
+                    <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                </div>
+                <div class="flex-1 text-center text-xs text-slate-500 font-mono">data_scientist@portfolio ~ (zsh)</div>
+                <button onclick="toggleTerminal()" class="text-slate-500 hover:text-slate-300 transition-colors">
+                    <i data-lucide="minimize-2" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="p-4 font-mono text-sm h-48 overflow-y-auto bg-slate-950/90" id="terminal-window">
+                <div class="text-slate-500 mb-2 text-xs">Last login: <span id="current-time"></span></div>
+                <div class="flex items-start gap-2 flex-wrap">
+                    <span class="text-green-400">➜</span>
+                    <span class="text-cyan-400">~</span>
+                    <span class="text-slate-300">$</span>
+                    <span id="terminal-input" class="text-slate-100 break-all"></span>
+                    <span class="cursor-blink w-2 h-5 bg-cyan-400 inline-block flex-shrink-0"></span>
+                </div>
+                <div id="terminal-output" class="mt-2 text-slate-300 whitespace-pre-line text-xs"></div>
+            </div>
         </div>
     </div>
-    
-    <!-- Initial X-Files Terminal -->
-    <div id="xfiles-terminal" class="w-full h-screen flex flex-col justify-center items-center p-4">
-        <div class="w-full max-w-3xl mx-auto">
-            <div class="mb-8 text-center">
-                <h1 class="text-4xl md:text-6xl font-bold font-orbitron alien-text">
-                    <i class="fas fa-satellite-dish mr-2"></i> iTude C0des GATEWAY
-                </h1>
-                <p class="mt-2 text-blue-300">CLASSIFIED ACCESS - LEVEL OMEGA</p>
+
+    <!-- Mobile Terminal Toggle Button -->
+    <button onclick="toggleMobileTerminal()" class="fixed bottom-4 right-4 md:hidden z-50 p-3 bg-cyan-600 rounded-full shadow-lg text-white border border-cyan-400">
+        <i data-lucide="terminal" class="w-6 h-6"></i>
+    </button>
+
+    <!-- Mobile Terminal Modal -->
+    <div id="mobile-terminal" class="fixed inset-0 z-50 bg-slate-950/95 hidden md:hidden flex items-center justify-center p-4">
+        <div class="w-full max-w-lg">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-cyan-400 font-mono text-sm">Terminal Preview</span>
+                <button onclick="toggleMobileTerminal()" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
             </div>
-            
-            <div id="terminal-output" class="mb-6 h-64 overflow-y-auto bg-black bg-opacity-70 p-4 rounded border border-blue-500">
-                <div class="terminal-line" style="animation-delay: 1s;">> Initializing FTL communication array...</div>
-                <div class="terminal-line" style="animation-delay: 1.5s;">> Scanning for extraterrestrial signals...</div>
-                <div class="terminal-line" style="animation-delay: 2s;">> Connecting to EVE Quantum Network...</div>
-                <div class="terminal-line" style="animation-delay: 2.5s;">> Accessing Ancient Alien Database...</div>
-                <div class="terminal-line" style="animation-delay: 3s;">> WARNING: Unidentified signal detected.</div>
-                <div class="terminal-line" style="animation-delay: 3.5s;">> The truth is out there.</div>
-                <div class="terminal-line" style="animation-delay: 4.5s;">> Prepare for light-speed transit.</div>
-            </div>
-            
-            <div id="login-form" class="opacity-0 fade-in" style="animation-delay: 5s;">
-                <div class="mb-4">
-                    <label class="block mb-2 text-blue-300">IDENTIFICATION:</label>
-                    <input type="text" id="username" class="w-full bg-black border-b border-blue-500 focus:outline-none py-2 px-1 terminal-text text-blue-400" autocomplete="off" placeholder="Enter your sign">
+            <div class="relative glass terminal-glow rounded-xl overflow-hidden border border-slate-700">
+                <div class="flex items-center gap-2 px-4 py-3 bg-slate-900/80 border-b border-slate-700">
+                    <div class="flex gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                    </div>
+                    <div class="flex-1 text-center text-xs text-slate-500 font-mono">data_scientist@portfolio</div>
                 </div>
-                <div class="flex justify-between items-center">
-                    <button id="transit-btn" class="bg-blue-900 hover:bg-blue-800 text-blue-100 py-2 px-6 rounded border border-blue-500 pulse">
-                        <i class="fas fa-rocket mr-2"></i> INITIATE LIGHT-SPEED TRANSIT
+                <div class="p-4 font-mono text-sm h-64 overflow-y-auto bg-slate-950/90" id="mobile-terminal-window">
+                    <div class="flex items-start gap-2 flex-wrap">
+                        <span class="text-green-400">➜</span>
+                        <span class="text-cyan-400">~</span>
+                        <span class="text-slate-300">$</span>
+                        <span id="mobile-terminal-input" class="text-slate-100 break-all"></span>
+                        <span class="cursor-blink w-2 h-5 bg-cyan-400 inline-block flex-shrink-0"></span>
+                    </div>
+                    <div id="mobile-terminal-output" class="mt-2 text-slate-300 whitespace-pre-line text-xs"></div>
+                </div>
+            </div>
+            <p class="text-center text-slate-500 text-xs mt-4">Passe o mouse sobre os elementos para ver os comandos</p>
+        </div>
+    </div>
+
+    <!-- KPI Cards Dashboard -->
+    <section id="dashboard" class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="glass-card rounded-xl p-6 terminal-trigger" data-cmd="SELECT COUNT(*) FROM repositories">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-2 bg-cyan-950/50 rounded-lg text-cyan-400">
+                        <i data-lucide="database" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-xs font-mono text-green-400">+12% ↑</span>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-100">47</h3>
+                <p class="text-sm text-slate-400 mt-1">Repositórios GitHub</p>
+                <div class="mt-4 h-1 bg-slate-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-cyan-500 w-3/4 chart-bar"></div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-xl p-6 terminal-trigger" data-cmd="python -c 'import ml_models; print(len(ml_models))'">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-2 bg-purple-950/50 rounded-lg text-purple-400">
+                        <i data-lucide="brain" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-xs font-mono text-green-400">+8% ↑</span>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-100">156</h3>
+                <p class="text-sm text-slate-400 mt-1">Modelos ML Treinados</p>
+                <div class="mt-4 h-1 bg-slate-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-purple-500 w-4/5 chart-bar"></div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-xl p-6 terminal-trigger" data-cmd="SELECT SUM(queries) FROM analytics WHERE date > '2024-01-01'">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-2 bg-yellow-950/50 rounded-lg text-yellow-400">
+                        <i data-lucide="code-2" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-xs font-mono text-green-400">+24% ↑</span>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-100">2.4k</h3>
+                <p class="text-sm text-slate-400 mt-1">Consultas SQL</p>
+                <div class="mt-4 h-1 bg-slate-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-yellow-500 w-2/3 chart-bar"></div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-xl p-6 terminal-trigger" data-cmd="docker ps | grep jupyter">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-2 bg-green-950/50 rounded-lg text-green-400">
+                        <i data-lucide="activity" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-xs font-mono text-slate-300">Online</span>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-100">99.9%</h3>
+                <p class="text-sm text-slate-400 mt-1">Uptime Notebooks</p>
+                <div class="mt-4 h-1 bg-slate-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-green-500 w-11/12 chart-bar"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section id="stack" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-100 mb-4">Tech Stack & Ferramentas</h2>
+            <p class="text-slate-400">Tecnologias utilizadas para análise, modelagem e deploy de soluções de dados.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Python -->
+            <div class="glass-card rounded-xl p-6 terminal-trigger group" data-cmd="python --version && pip list | head -10">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-lg bg-yellow-500/10 flex items-center justify-center text-yellow-400">
+                        <i data-lucide="code" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-100">Python</h3>
+                        <p class="text-xs text-slate-500 font-mono">v3.11+</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">Pandas</span>
+                        <span class="text-slate-500 font-mono">2.1.0</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">NumPy</span>
+                        <span class="text-slate-500 font-mono">1.24.0</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">Scikit-learn</span>
+                        <span class="text-slate-500 font-mono">1.3.0</span>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-slate-700">
+                    <code class="text-xs font-mono text-yellow-400/80">import pandas as pd</code>
+                </div>
+            </div>
+
+            <!-- SQL -->
+            <div class="glass-card rounded-xl p-6 terminal-trigger group" data-cmd="mysql -u root -p -e 'SHOW DATABASES;'">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">
+                        <i data-lucide="table-2" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-100">SQL & Databases</h3>
+                        <p class="text-xs text-slate-500 font-mono">PostgreSQL | MySQL</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">Query Optimization</span>
+                        <span class="text-green-400 text-xs">●</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">Data Modeling</span>
+                        <span class="text-green-400 text-xs">●</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">ETL Pipelines</span>
+                        <span class="text-green-400 text-xs">●</span>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-slate-700">
+                    <code class="text-xs font-mono text-blue-400/80">SELECT * FROM insights</code>
+                </div>
+            </div>
+
+            <!-- Machine Learning -->
+            <div class="glass-card rounded-xl p-6 terminal-trigger group" data-cmd="python train.py --model xgboost --tune">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400">
+                        <i data-lucide="cpu" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-100">Machine Learning</h3>
+                        <p class="text-xs text-slate-500 font-mono">Scikit-learn | XGBoost</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">Regressão & Classificação</span>
+                        <span class="text-slate-500">Expert</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">Feature Engineering</span>
+                        <span class="text-slate-500">Expert</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">Model Optimization</span>
+                        <span class="text-slate-500">Advanced</span>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-slate-700">
+                    <code class="text-xs font-mono text-purple-400/80">model.fit(X_train, y_train)</code>
+                </div>
+            </div>
+
+            <!-- Deep Learning -->
+            <div class="glass-card rounded-xl p-6 terminal-trigger group" data-cmd="nvidia-smi && python train_cnn.py --epochs 100">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-lg bg-pink-500/10 flex items-center justify-center text-pink-400">
+                        <i data-lucide="network" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-100">Deep Learning</h3>
+                        <p class="text-xs text-slate-500 font-mono">TensorFlow | PyTorch</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">CNN & RNN</span>
+                        <span class="text-slate-500">Advanced</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">Transformers</span>
+                        <span class="text-slate-500">Intermediate</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">GPU Training</span>
+                        <span class="text-green-400 text-xs">CUDA</span>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-slate-700">
+                    <code class="text-xs font-mono text-pink-400/80">torch.nn.Module</code>
+                </div>
+            </div>
+
+            <!-- Data Viz -->
+            <div class="glass-card rounded-xl p-6 terminal-trigger group" data-cmd="python dashboard.py --port 8050">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400">
+                        <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-100">Data Visualization</h3>
+                        <p class="text-xs text-slate-500 font-mono">Plotly | Matplotlib | Seaborn</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">Dashboards BI</span>
+                        <span class="text-slate-500">Expert</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">Interactive Plots</span>
+                        <span class="text-slate-500">Expert</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">Storytelling</span>
+                        <span class="text-slate-500">Advanced</span>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-slate-700">
+                    <code class="text-xs font-mono text-cyan-400/80">px.scatter_3d(df, x, y, z)</code>
+                </div>
+            </div>
+
+            <!-- Cloud/MLOps -->
+            <div class="glass-card rounded-xl p-6 terminal-trigger group" data-cmd="kubectl get pods --namespace ml-production">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-400">
+                        <i data-lucide="cloud" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-100">MLOps & Cloud</h3>
+                        <p class="text-xs text-slate-500 font-mono">AWS | Docker | Kubernetes</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">Model Deployment</span>
+                        <span class="text-slate-500">Advanced</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">CI/CD Pipelines</span>
+                        <span class="text-slate-500">Intermediate</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">Containerization</span>
+                        <span class="text-green-400 text-xs">Docker</span>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-slate-700">
+                    <code class="text-xs font-mono text-orange-400/80">docker build -t ml-api .</code>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GitHub Repositories Section -->
+    <section id="repositories" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="mb-12 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h2 class="text-3xl font-bold text-slate-100 mb-2">Repositórios GitHub</h2>
+                <p class="text-slate-400 font-mono text-sm">git log --oneline --graph --all</p>
+            </div>
+            <button class="terminal-trigger px-4 py-2 glass rounded-lg text-sm font-medium hover:border-cyan-400 transition-colors flex items-center gap-2" data-cmd="gh repo list --limit 100">
+                <i data-lucide="github" class="w-4 h-4"></i>
+                Ver Todos no GitHub
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Repo 1 -->
+            <div class="glass-card rounded-xl p-6 border-l-4 border-l-yellow-500 terminal-trigger" data-cmd="git clone https://github.com/user/predictive-analytics.git">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="book-marked" class="w-5 h-5 text-slate-400"></i>
+                        <h3 class="font-semibold text-slate-100 font-mono">predictive-analytics</h3>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-slate-500">
+                        <span class="flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i> 128</span>
+                        <span class="flex items-center gap-1"><i data-lucide="git-fork" class="w-3 h-3"></i> 34</span>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-400 mb-4">Sistema de predição de churn usando XGBoost e Random Forest com pipeline completo de feature engineering.</p>
+                <div class="flex items-center justify-between">
+                    <div class="flex gap-2">
+                        <span class="px-2 py-1 rounded bg-yellow-500/10 text-yellow-400 text-xs font-mono">Python</span>
+                        <span class="px-2 py-1 rounded bg-blue-500/10 text-blue-400 text-xs font-mono">Jupyter</span>
+                    </div>
+                    <span class="text-xs text-slate-500">Atualizado há 2 dias</span>
+                </div>
+            </div>
+
+            <!-- Repo 2 -->
+            <div class="glass-card rounded-xl p-6 border-l-4 border-l-purple-500 terminal-trigger" data-cmd="git clone https://github.com/user/deep-learning-cnn.git">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="book-marked" class="w-5 h-5 text-slate-400"></i>
+                        <h3 class="font-semibold text-slate-100 font-mono">deep-learning-cnn</h3>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-slate-500">
+                        <span class="flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i> 89</span>
+                        <span class="flex items-center gap-1"><i data-lucide="git-fork" class="w-3 h-3"></i> 21</span>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-400 mb-4">Classificação de imagens médicas usando CNNs com TensorFlow. Implementação de data augmentation e transfer learning.</p>
+                <div class="flex items-center justify-between">
+                    <div class="flex gap-2">
+                        <span class="px-2 py-1 rounded bg-purple-500/10 text-purple-400 text-xs font-mono">TensorFlow</span>
+                        <span class="px-2 py-1 rounded bg-pink-500/10 text-pink-400 text-xs font-mono">Keras</span>
+                    </div>
+                    <span class="text-xs text-slate-500">Atualizado há 1 semana</span>
+                </div>
+            </div>
+
+            <!-- Repo 3 -->
+            <div class="glass-card rounded-xl p-6 border-l-4 border-l-blue-500 terminal-trigger" data-cmd="git clone https://github.com/user/nlp-sentiment-analysis.git">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="book-marked" class="w-5 h-5 text-slate-400"></i>
+                        <h3 class="font-semibold text-slate-100 font-mono">nlp-sentiment-analysis</h3>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-slate-500">
+                        <span class="flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i> 245</span>
+                        <span class="flex items-center gap-1"><i data-lucide="git-fork" class="w-3 h-3"></i> 56</span>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-400 mb-4">Análise de sentimentos em reviews de produtos usando BERT e transformers. API REST para predições em tempo real.</p>
+                <div class="flex items-center justify-between">
+                    <div class="flex gap-2">
+                        <span class="px-2 py-1 rounded bg-yellow-500/10 text-yellow-400 text-xs font-mono">PyTorch</span>
+                        <span class="px-2 py-1 rounded bg-green-500/10 text-green-400 text-xs font-mono">FastAPI</span>
+                    </div>
+                    <span class="text-xs text-slate-500">Atualizado há 3 dias</span>
+                </div>
+            </div>
+
+            <!-- Repo 4 -->
+            <div class="glass-card rounded-xl p-6 border-l-4 border-l-cyan-500 terminal-trigger" data-cmd="git clone https://github.com/user/sql-optimization-toolkit.git">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="book-marked" class="w-5 h-5 text-slate-400"></i>
+                        <h3 class="font-semibold text-slate-100 font-mono">sql-optimization-toolkit</h3>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-slate-500">
+                        <span class="flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i> 167</span>
+                        <span class="flex items-center gap-1"><i data-lucide="git-fork" class="w-3 h-3"></i> 42</span>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-400 mb-4">Coleção de scripts e técnicas para otimização de queries SQL, índices e modelagem dimensional para data warehouses.</p>
+                <div class="flex items-center justify-between">
+                    <div class="flex gap-2">
+                        <span class="px-2 py-1 rounded bg-blue-500/10 text-blue-400 text-xs font-mono">SQL</span>
+                        <span class="px-2 py-1 rounded bg-cyan-500/10 text-cyan-400 text-xs font-mono">PostgreSQL</span>
+                    </div>
+                    <span class="text-xs text-slate-500">Atualizado há 5 dias</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LinkedIn Section -->
+    <section id="linkedin" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="glass rounded-2xl p-8 md:p-12 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-cyan-600/10 rounded-full blur-3xl"></div>
+            
+            <div class="relative grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/50 border border-blue-800 text-blue-400 text-xs font-mono mb-6">
+                        <i data-lucide="linkedin" class="w-3 h-3"></i>
+                        linkedin.com/in/data-scientist
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-100 mb-4">Conecte-se no LinkedIn</h2>
+                    <p class="text-slate-400 mb-8 leading-relaxed">
+                        Acompanhe minha jornada em Data Science, Machine Learning e Inteligência Artificial. 
+                        Compartilho insights sobre Python, SQL, Deep Learning e melhores práticas de MLOps.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div class="text-center p-4 rounded-lg bg-slate-900/50 border border-slate-800">
+                            <div class="text-2xl font-bold text-blue-400">2.5k+</div>
+                            <div class="text-xs text-slate-500 mt-1">Conexões</div>
+                        </div>
+                        <div class="text-center p-4 rounded-lg bg-slate-900/50 border border-slate-800">
+                            <div class="text-2xl font-bold text-blue-400">500+</div>
+                            <div class="text-xs text-slate-500 mt-1">Endorsements</div>
+                        </div>
+                    </div>
+
+                    <button class="terminal-trigger w-full md:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium transition-all flex items-center justify-center gap-2 group" data-cmd="open https://linkedin.com/in/profile">
+                        <i data-lucide="linkedin" class="w-5 h-5"></i>
+                        Conectar no LinkedIn
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                     </button>
-                    <div class="text-blue-300 text-sm">
-                        <i class="fas fa-info-circle mr-1"></i> Destination: github.com/igortude
+                </div>
+
+                <div class="relative">
+                    <div class="glass-card rounded-xl p-6 space-y-4">
+                        <div class="flex items-center gap-4 pb-4 border-b border-slate-800">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-white font-bold text-xl">
+                                DS
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-100">Data Scientist</h3>
+                                <p class="text-sm text-slate-400">ML Engineer | Python | SQL</p>
+                                <p class="text-xs text-slate-500 mt-1">São Paulo, Brasil</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3 text-sm text-slate-300">
+                                <i data-lucide="briefcase" class="w-4 h-4 text-slate-500"></i>
+                                <span>Data Scientist Senior @ Tech Company</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-slate-300">
+                                <i data-lucide="graduation-cap" class="w-4 h-4 text-slate-500"></i>
+                                <span>Mestrado em Ciência da Computação</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-slate-300">
+                                <i data-lucide="award" class="w-4 h-4 text-slate-500"></i>
+                                <span>TensorFlow Developer Certificate</span>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 pt-4">
+                            <span class="px-3 py-1 rounded-full bg-slate-800 text-xs text-slate-300">Machine Learning</span>
+                            <span class="px-3 py-1 rounded-full bg-slate-800 text-xs text-slate-300">Deep Learning</span>
+                            <span class="px-3 py-1 rounded-full bg-slate-800 text-xs text-slate-300">Python</span>
+                            <span class="px-3 py-1 rounded-full bg-slate-800 text-xs text-slate-300">SQL</span>
+                            <span class="px-3 py-1 rounded-full bg-slate-800 text-xs text-slate-300">MLOps</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    
+    </section>
+
+    <!-- Contact Terminal -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mb-20">
+        <div class="glass rounded-xl overflow-hidden border border-slate-700">
+            <div class="bg-slate-900/80 px-4 py-3 border-b border-slate-700 flex items-center gap-2">
+                <i data-lucide="terminal-square" class="w-4 h-4 text-cyan-400"></i>
+                <span class="text-xs text-slate-400 font-mono">contact_form.sh</span>
+            </div>
+            <div class="p-6 md:p-8">
+                <h3 class="text-xl font-bold text-slate-100 mb-6 font-mono">./iniciar_conversa.sh</h3>
+                <form class="space-y-4 font-mono text-sm" onsubmit="event.preventDefault();">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-cyan-400">nome=</label>
+                            <input type="text" placeholder="'Seu Nome'" class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-300 focus:border-cyan-400 focus:outline-none transition-colors">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-cyan-400">email=</label>
+                            <input type="email" placeholder="'email@exemplo.com'" class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-300 focus:border-cyan-400 focus:outline-none transition-colors">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-cyan-400">mensagem=</label>
+                        <textarea rows="4" placeholder="'Digite sua mensagem aqui...'" class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-300 focus:border-cyan-400 focus:outline-none transition-colors resize-none"></textarea>
+                    </div>
+                    <div class="flex items-center justify-between pt-4">
+                        <span class="text-slate-500 text-xs"># Pressione Enter para enviar</span>
+                        <button type="submit" class="terminal-trigger px-6 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-medium transition-colors flex items-center gap-2" data-cmd="echo 'Mensagem enviada com sucesso!' && mail -s 'Contato Portfolio' user@email.com">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                            Enviar Mensagem
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-950/50 py-8 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2 font-mono text-sm text-slate-500">
+                <span class="text-cyan-400">➜</span>
+                <span>~</span>
+                <span class="text-slate-400">echo "© 2024 Data Science Portfolio"</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="#" class="text-slate-500 hover:text-cyan-400 transition-colors terminal-trigger" data-cmd="github">
+                    <i data-lucide="github" class="w-5 h-5"></i>
+                </a>
+                <a href="#" class="text-slate-500 hover:text-blue-400 transition-colors terminal-trigger" data-cmd="linkedin">
+                    <i data-lucide="linkedin" class="w-5 h-5"></i>
+                </a>
+                <a href="#" class="text-slate-500 hover:text-pink-400 transition-colors terminal-trigger" data-cmd="kaggle">
+                    <i data-lucide="trophy" class="w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Create starfield background
-            const starsContainer = document.getElementById('stars');
-            const starCount = 200;
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Terminal Animation Logic
+        const terminalInput = document.getElementById('terminal-input');
+        const terminalOutput = document.getElementById('terminal-output');
+        const mobileTerminalInput = document.getElementById('mobile-terminal-input');
+        const mobileTerminalOutput = document.getElementById('mobile-terminal-output');
+        const terminalTriggers = document.querySelectorAll('.terminal-trigger');
+        
+        let isTyping = false;
+        let typingQueue = [];
+        let terminalMinimized = false;
+        
+        // Terminal toggle functions
+        function toggleTerminal() {
+            const terminal = document.getElementById('fixed-terminal');
+            const window_term = document.getElementById('terminal-window');
+            const btn = event.currentTarget.querySelector('i');
             
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.width = (Math.random() * 3) + 'px';
-                star.style.height = star.style.width;
-                star.style.left = (Math.random() * 100) + '%';
-                star.style.top = (Math.random() * 100) + '%';
-                star.style.opacity = Math.random();
-                star.style.animationDelay = (Math.random() * 5) + 's';
-                star.style.animationDuration = (2 + Math.random() * 8) + 's';
-                starsContainer.appendChild(star);
+            terminalMinimized = !terminalMinimized;
+            
+            if (terminalMinimized) {
+                window_term.style.height = '0px';
+                window_term.style.padding = '0px';
+                btn.setAttribute('data-lucide', 'maximize-2');
+            } else {
+                window_term.style.height = '192px'; // h-48
+                window_term.style.padding = '16px'; // p-4
+                btn.setAttribute('data-lucide', 'minimize-2');
             }
+            lucide.createIcons();
+        }
+        
+        function toggleMobileTerminal() {
+            const mobileTerm = document.getElementById('mobile-terminal');
+            if (mobileTerm.classList.contains('hidden')) {
+                mobileTerm.classList.remove('hidden');
+                // Sync content with main terminal
+                if (mobileTerminalInput) mobileTerminalInput.textContent = terminalInput.textContent;
+                if (mobileTerminalOutput) mobileTerminalOutput.innerHTML = terminalOutput.innerHTML;
+            } else {
+                mobileTerm.classList.add('hidden');
+            }
+        }
+        
+        const commandOutputs = {
+            'cd ./dashboard': 'Navegando para Dashboard...\n< span class="text-terminal-green" > ✓ </span > Dashboard carregado. 4 KPIs ativos.',
+            'git status': 'On branch main\nYour branch is up to date with \'origin/main\'.\n\nChanges not staged for commit:\n  (use "git add <file>..." to update what will be committed)\n  <span class="text-terminal-cyan">modified:   model.py</span>\n  <span class="text-terminal-cyan">modified:   requirements.txt</span>',
+            'pip list': 'Package         Version\n--------------- -------\n<span class="text-terminal-yellow">pandas</span>          2.1.0\n<span class="text-terminal-yellow">numpy</span>           1.24.0\n<span class="text-terminal-yellow">scikit-learn</span>    1.3.0\n<span class="text-terminal-yellow">tensorflow</span>      2.13.0\n<span class="text-terminal-yellow">torch</span>           2.0.1',
+            'curl linkedin.com/in/profile': '<span class="text-terminal-purple">HTTP/2 200</span>\nContent-Type: application/json\n\n{\n  "name": "Data Scientist",\n  "role": "ML Engineer",\n  "connections": 2500,\n  "status": "<span class="text-terminal-green">Open to work</span>"\n}',
+            'python deploy_model.py': '<span class="text-terminal-cyan">[INFO]</span> Loading model artifacts...\n<span class="text-terminal-cyan">[INFO]</span> Model accuracy: 94.5%\n<span class="text-terminal-cyan">[INFO]</span> Deploying to production...\n<span class="text-terminal-green">[SUCCESS]</span> Model deployed successfully! API endpoint: /predict',
+            'jupyter notebook': '<span class="text-terminal-green">[I 10:23:45 NotebookApp]</span> Serving notebooks from local directory\n<span class="text-terminal-green">[I 10:23:45 NotebookApp]</span> Jupyter Notebook 6.5.4 is running at:\n<span class="text-terminal-green">[I 10:23:45 NotebookApp]</span> http://localhost:8888/?token=abc123',
+            'git clone https://github.com/user/predictive-analytics.git': 'Cloning into \'predictive-analytics\'...\nremote: Enumerating objects: 1452, done.\nremote: Total 1452 (delta 0), reused 0 (delta 0), pack-reused 1452\nReceiving objects: 100% (1452/1452), 15.34 MiB | 5.21 MiB/s, done.',
+            'python train.py --model xgboost --tune': '<span class="text-terminal-cyan">[INFO]</span> Starting training with XGBoost\n<span class="text-terminal-cyan">[INFO]</span> Tuning hyperparameters with GridSearchCV...\n<span class="text-terminal-cyan">[Epoch 1/100]</span> loss: 0.4523 - accuracy: 0.8234\n<span class="text-terminal-cyan">[Epoch 50/100]</span> loss: 0.1234 - accuracy: 0.9456\n<span class="text-terminal-green">[SUCCESS]</span> Training complete. Best score: 0.9567',
+            'mysql -u root -p -e \'SHOW DATABASES;\'': 'Enter password: ********\n+--------------------+\n| Database           |\n+--------------------+\n| information_schema |\n| <span class="text-terminal-cyan">ml_models_db</span>       |\n| <span class="text-terminal-cyan">analytics_dw</span>       |\n| <span class="text-terminal-cyan">production_api</span>     |\n+--------------------+',
+            'SELECT COUNT(*) FROM repositories': '+----------+\n| count(*) |\n+----------+\n|       47 |\n+----------+\n<span class="text-terminal-green">Query OK, 1 row affected</span>',
+            'python -c \'import ml_models; print(len(ml_models))\'': '156',
+            'SELECT SUM(queries) FROM analytics WHERE date > \'2024-01-01\'': '+-------------+\n| sum(queries)|\n+-------------+\n|        2400 |\n+-------------+',
+            'docker ps | grep jupyter': 'CONTAINER ID   IMAGE             STATUS         PORTS                    NAMES\n<span class="text-terminal-cyan">a1b2c3d4e5f6</span>   jupyter/scipy     Up 45 minutes  0.0.0.0:8888->8888/tcp   data-science-notebook',
+            'nvidia-smi && python train_cnn.py --epochs 100': 'Thu Jan 15 10:30:00 2024\n+-----------------------------------------------------------------------------+\n| NVIDIA-SMI 525.85.12    Driver Version: 525.85.12    CUDA Version: 12.0     |\n|-------------------------------+----------------------+----------------------+\n| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |\n|                               |                      |               MIG M. |\n|===============================+======================+======================|\n|   0  Tesla T4            On   | 00000000:00:1E.0 Off |                    0 |\n| N/A   45C    P0    68W /  70W |   1092MiB / 15360MiB |     95%      Default |\n+-------------------------------+----------------------+----------------------+\n\n<span class="text-terminal-cyan">[Epoch 1/100]</span> loss: 2.1234 - accuracy: 0.3456\n<span class="text-terminal-cyan">[Epoch 100/100]</span> loss: 0.0234 - accuracy: 0.9876\n<span class="text-terminal-green">[SUCCESS]</span> CNN training complete!',
+            'python dashboard.py --port 8050': '<span class="text-terminal-cyan">Dash</span> is running on http://127.0.0.1:8050/\n * Serving Flask app \'dashboard\'\n * Debug mode: on\n<span class="text-terminal-green">[INFO]</span> Loading data from PostgreSQL...\n<span class="text-terminal-green">[INFO]</span> 15 charts rendered successfully',
+            'kubectl get pods --namespace ml-production': 'NAME                              READY   STATUS    RESTARTS   AGE\n<span class="text-terminal-cyan">model-api-7d9f4b8c5-x2v4r</span>        1/1     Running   0          2d14h\n<span class="text-terminal-cyan">jupyter-hub-5c8f2a1b-m3n5k</span>       1/1     Running   0          5d2h\n<span class="text-terminal-cyan">postgres-ml-0</span>                     1/1     Running   0          7d1h',
+            'echo \'Mensagem enviada com sucesso!\' && mail -s \'Contato Portfolio\' user@email.com': '<span class="text-terminal-green">Mensagem enviada com sucesso!</span>\n<span class="text-terminal-cyan">[MAIL]</span> Queued message to user@email.com\n<span class="text-terminal-cyan">[MAIL]</span> Subject: Contato Portfolio\n<span class="text-terminal-green">[SUCCESS]</span> Email enviado! Retornando em 24h.',
+            'open https://linkedin.com/in/profile': 'Opening LinkedIn profile...\n<span class="text-terminal-green">✓</span> Conexão estabelecida com linkedin.com',
+            'gh repo list --limit 100': 'Showing 47 of 47 repositories in @user\n\nNAME                           Visibility  Updated\ndata-science-portfolio          <span class="text-terminal-green">public</span>      2d\npredictive-analytics            <span class="text-terminal-green">public</span>      2d\ndeep-learning-cnn               <span class="text-terminal-green">public</span>      1w\nnlp-sentiment-analysis          <span class="text-terminal-green">public</span>      3d\nsql-optimization-toolkit        <span class="text-terminal-green">public</span>      5d',
+            'default': '<span class="text-terminal-green">✓</span> Comando executado com sucesso.'
+        };
+
+        function typeText(text, callback) {
+            isTyping = true;
+            terminalInput.textContent = '';
+            if (mobileTerminalInput) mobileTerminalInput.textContent = '';
+            let i = 0;
             
-            // Show login form after terminal lines appear
+            const interval = setInterval(() => {
+                const char = text.charAt(i);
+                terminalInput.textContent += char;
+                if (mobileTerminalInput) mobileTerminalInput.textContent += char;
+                i++;
+                if (i >= text.length) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        if (callback) callback();
+                        isTyping = false;
+                        processQueue();
+                    }, 300);
+                }
+            }, 50);
+        }
+
+        function showOutput(cmd) {
+            const output = commandOutputs[cmd] || commandOutputs['default'];
+            terminalOutput.innerHTML = output;
+            if (mobileTerminalOutput) mobileTerminalOutput.innerHTML = output;
+            
+            terminalOutput.classList.add('animate-pulse');
+            if (mobileTerminalOutput) mobileTerminalOutput.classList.add('animate-pulse');
+            
             setTimeout(() => {
-                document.getElementById('login-form').style.opacity = '1';
-            }, 5000);
+                terminalOutput.classList.remove('animate-pulse');
+                if (mobileTerminalOutput) mobileTerminalOutput.classList.remove('animate-pulse');
+            }, 500);
             
-            // Light-speed transit button
-            document.getElementById('transit-btn').addEventListener('click', function(e) {
-                e.preventDefault();
-                const username = document.getElementById('username').value.trim();
-                
-                if (!username) {
-                    const terminalOutput = document.getElementById('terminal-output');
-                    terminalOutput.innerHTML += `<div>> ERROR: Pilot identification required for transit.</div>`;
-                    terminalOutput.scrollTop = terminalOutput.scrollHeight;
-                    return;
-                }
-                
-                // Start transit sequence
-                document.getElementById('xfiles-terminal').style.display = 'none';
-                const lightSpeed = document.getElementById('light-speed');
-                lightSpeed.style.display = 'block';
-                
-                const tunnel = document.getElementById('light-speed-tunnel');
-                
-                // Create traveling stars for warp speed effect
-                function createTravelingStars() {
-                    const starCount = 200;
-                    const colors = ['#fff', '#0af', '#0ff', '#aaf'];
-                    
-                    for (let i = 0; i < starCount; i++) {
-                        const star = document.createElement('div');
-                        star.className = 'travel-star';
-                        
-                        // Random size
-                        const size = Math.random() * 4 + 1;
-                        star.style.width = `${size}px`;
-                        star.style.height = `${size}px`;
-                        
-                        // Random position
-                        star.style.left = `${Math.random() * 100}%`;
-                        star.style.top = `${Math.random() * 100}%`;
-                        
-                        // Random color
-                        star.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                        
-                        // Random animation duration and delay
-                        const duration = 1 + Math.random() * 2;
-                        const delay = Math.random() * 3;
-                        star.style.animationDuration = `${duration}s`;
-                        star.style.animationDelay = `${delay}s`;
-                        
-                        tunnel.appendChild(star);
+            // Auto scroll to bottom
+            const termWindow = document.getElementById('terminal-window');
+            if (termWindow) termWindow.scrollTop = termWindow.scrollHeight;
+            const mobileTermWindow = document.getElementById('mobile-terminal-window');
+            if (mobileTermWindow) mobileTermWindow.scrollTop = mobileTermWindow.scrollHeight;
+        }
+
+        function processQueue() {
+            if (typingQueue.length > 0 && !isTyping) {
+                const next = typingQueue.shift();
+                executeCommand(next);
+            }
+        }
+
+        function executeCommand(cmd) {
+            terminalOutput.innerHTML = '';
+            typeText(cmd, () => showOutput(cmd));
+        }
+
+        function queueCommand(cmd) {
+            typingQueue.push(cmd);
+            processQueue();
+        }
+
+        // Add event listeners to terminal triggers
+        terminalTriggers.forEach(trigger => {
+            trigger.addEventListener('mouseenter', () => {
+                const cmd = trigger.getAttribute('data-cmd');
+                if (cmd) {
+                    // Clear queue if it's getting too long
+                    if (typingQueue.length > 2) {
+                        typingQueue = typingQueue.slice(-1);
                     }
-                    
-                    // Keep adding new stars periodically for continuous effect
-                    const starInterval = setInterval(() => {
-                        const star = document.createElement('div');
-                        star.className = 'travel-star';
-                        
-                        const size = Math.random() * 4 + 1;
-                        star.style.width = `${size}px`;
-                        star.style.height = `${size}px`;
-                        star.style.left = `${Math.random() * 100}%`;
-                        star.style.top = `${Math.random() * 100}%`;
-                        star.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                        
-                        const duration = 1 + Math.random() * 2;
-                        star.style.animationDuration = `${duration}s`;
-                        
-                        tunnel.appendChild(star);
-                        
-                        // Remove star after animation completes
-                        setTimeout(() => {
-                            star.remove();
-                        }, duration * 1000);
-                    }, 50);
-                    
-                    // Stop creating stars after 3 seconds
-                    setTimeout(() => {
-                        clearInterval(starInterval);
-                    }, 3000);
+                    queueCommand(cmd);
                 }
-                
-                createTravelingStars();
-                
-                // Show transit messages
-                const messages = [
-                    `ENGAGING LIGHT-SPEED DRIVE, ${username.toUpperCase()}`,
-                    "ACCELERATING TO WARP VELOCITY",
-                    "TRAVELING THROUGH HYPERSPACE",
-                    "APPROACHING DESTINATION"
-                ];
-                
-                let currentMessage = 0;
-                const showMessage = () => {
-                    if (currentMessage >= messages.length) {
-                        // Show destination
-                        document.getElementById('destination').style.display = 'block';
-                        
-                        // Redirect after animation completes
-                        setTimeout(() => {
-                            window.location.href = "https://github.com/igortude";
-                        }, 3000);
-                        return;
-                    }
-                    
-                    const message = document.createElement('div');
-                    message.className = 'transit-message';
-                    message.textContent = messages[currentMessage];
-                    message.style.animationDelay = `${currentMessage * 0.5}s`;
-                    document.body.appendChild(message);
-                    
-                    // Remove message after animation
-                    setTimeout(() => {
-                        message.remove();
-                    }, 2000);
-                    
-                    currentMessage++;
-                    setTimeout(showMessage, 1000);
-                };
-                
-                showMessage();
             });
             
-            // Make terminal inputs have the typing cursor effect
-            const inputs = document.querySelectorAll('.terminal-text');
-            inputs.forEach(input => {
-                input.addEventListener('focus', function() {
-                    this.classList.add('terminal-text');
-                });
-                
-                input.addEventListener('blur', function() {
-                    this.classList.remove('terminal-text');
-                });
+            trigger.addEventListener('click', (e) => {
+                const cmd = trigger.getAttribute('data-cmd');
+                if (cmd.includes('linkedin.com') || cmd.includes('github.com')) {
+                    // Simulate opening link
+                    queueCommand(cmd);
+                    setTimeout(() => {
+                        window.open('https://' + cmd.replace('open ', '').replace('git clone https://', '').split('/')[0], '_blank');
+                    }, 1000);
+                } else if (cmd === 'github') {
+                    window.open('https://github.com', '_blank');
+                } else if (cmd === 'linkedin') {
+                    window.open('https://linkedin.com', '_blank');
+                } else if (cmd === 'kaggle') {
+                    window.open('https://kaggle.com', '_blank');
+                }
             });
+        });
+        
+        // Also add click handlers for touch devices
+        terminalTriggers.forEach(trigger => {
+            trigger.addEventListener('touchstart', () => {
+                const cmd = trigger.getAttribute('data-cmd');
+                if (cmd) {
+                    queueCommand(cmd);
+                    // Show mobile terminal if on mobile
+                    if (window.innerWidth < 768) {
+                        const mobileTerm = document.getElementById('mobile-terminal');
+                        if (mobileTerm && mobileTerm.classList.contains('hidden')) {
+                            mobileTerm.classList.remove('hidden');
+                        }
+                    }
+                }
+            }, {passive: true});
+        });
+
+        // Set current time in terminal
+        document.getElementById('current-time').textContent = new Date().toLocaleString('pt-BR');
+
+        // Initial welcome message
+        setTimeout(() => {
+            queueCommand('whoami');
+        }, 1000);
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                queueCommand('ls -la menu/');
+                alert('Menu mobile em desenvolvimento! Use a versão desktop para melhor experiência.');
+            });
+        }
+
+        // Add whoami output
+        commandOutputs['whoami'] = '<span class="text-terminal-cyan">data-scientist</span>\n<span class="text-terminal-green">✓</span> Sistema pronto para análise.\n<span class="text-slate-500">Passe o mouse sobre os elementos para ver comandos...</span>';
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.glass-card').forEach((el) => {
+            el.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-10');
+            observer.observe(el);
         });
     </script>
 </body>

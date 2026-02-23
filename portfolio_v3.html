@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Igor Tude | Data Scientist & Desenvolvedor de Sistemas</title>
+    <meta name="description" content="Igor Tude - Data Scientist e Desenvolvedor de Sistemas. Python, SQL, Machine Learning e desenvolvimento multiplataforma.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" onload="if(typeof lucide !== 'undefined') { setTimeout(() => lucide.createIcons(), 100); }"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{font-family:'Inter',sans-serif;margin:0;padding:0;box-sizing:border-box;}
+        html{scroll-behavior:smooth;}
+        body{background:#050810;color:#e2e8f0;overflow-x:hidden;min-height:100vh;}
+        .font-mono{font-family:'JetBrains Mono',monospace;}
+        .code-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;overflow:hidden;pointer-events:none;}
+        .matrix-grid{position:absolute;width:100%;height:100%;background-image:linear-gradient(rgba(6,182,212,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(6,182,212,0.03) 1px,transparent 1px);background-size:50px 50px;animation:grid-scroll 20s linear infinite;}
+        @keyframes grid-scroll{0%{transform:translateY(0)}100%{transform:translateY(50px)}}
+        .gradient-orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.15;animation:float 20s ease-in-out infinite;}
+        .orb-1{width:500px;height:500px;background:radial-gradient(circle,#06b6d4 0%,transparent 70%);top:-10%;left:-10%;animation-delay:0s;}
+        .orb-2{width:400px;height:400px;background:radial-gradient(circle,#8b5cf6 0%,transparent 70%);top:40%;right:-10%;animation-delay:7s;}
+        .orb-3{width:350px;height:350px;background:radial-gradient(circle,#10b981 0%,transparent 70%);bottom:-10%;left:30%;animation-delay:14s;}
+        @keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(50px,-50px) scale(1.1)}66%{transform:translate(-30px,30px) scale(0.9)}}
+        .code-line{position:absolute;font-family:'JetBrains Mono',monospace;font-size:12px;white-space:nowrap;opacity:0;animation:rise-up linear infinite;text-shadow:0 0 10px currentColor;}
+        @keyframes rise-up{0%{transform:translateY(100vh) translateX(0);opacity:0}5%{opacity:0.3}95%{opacity:0.3}100%{transform:translateY(-50px) translateX(20px);opacity:0}}
+        .code-python{color:#fbbf24}.code-sql{color:#60a5fa}.code-stats{color:#c084fc}.code-ml{color:#34d399}.code-formula{color:#f472b6}
+        .code-canvas::before,.code-canvas::after{content:'';position:absolute;left:0;right:0;height:200px;z-index:1;pointer-events:none;}
+        .code-canvas::before{top:0;background:linear-gradient(to bottom,#050810,transparent);}
+        .code-canvas::after{bottom:0;background:linear-gradient(to top,#050810,transparent);}
+        .navbar{position:fixed;top:0;left:0;right:0;z-index:50;transform:translateY(-100%);transition:all 0.3s ease;border-bottom:1px solid transparent;}
+        .navbar.visible{transform:translateY(0);background:rgba(5,8,16,0.8);backdrop-filter:blur(12px);border-bottom:1px solid rgba(6,182,212,0.1);}
+        .avatar-container{position:relative;width:140px;height:140px;margin-bottom:24px;}
+        .avatar-ring{position:absolute;inset:-4px;border-radius:50%;background:linear-gradient(45deg,#06b6d4,#8b5cf6,#10b981,#06b6d4);background-size:300% 300%;animation:gradient-rotate 3s ease infinite;filter:blur(8px);}
+        @keyframes gradient-rotate{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+        .avatar{position:relative;width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#0891b2 0%,#06b6d4 100%);display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:700;color:white;border:4px solid #050810;box-shadow:0 0 40px rgba(6,182,212,0.3);}
+        .cursor{display:inline-block;width:2px;height:20px;background:#06b6d4;animation:blink 0.75s step-end infinite;}
+        @keyframes blink{from,to{border-color:transparent}50%{border-color:#06b6d4}}
+        .pulse{animation:pulse 2s ease-in-out infinite;}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+        .stat-card{background:rgba(15,23,42,0.6);border:1px solid rgba(100,116,139,0.2);border-radius:12px;padding:16px;text-align:center;transition:all 0.3s ease;}
+        .stat-card:hover{border-color:rgba(6,182,212,0.4);transform:translateY(-2px);box-shadow:0 4px 20px rgba(6,182,212,0.1);}
+        .stat-number{font-size:32px;font-weight:700;background:linear-gradient(135deg,#06b6d4,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+        .cv-sections-container{background:rgba(15,23,42,0.4);border:1px solid rgba(100,116,139,0.2);border-radius:16px;overflow:hidden;}
+        .cv-sections-tabs{display:flex;background:rgba(5,8,16,0.6);border-bottom:1px solid rgba(100,116,139,0.2);overflow-x:auto;scrollbar-width:thin;}
+        .section-tab{flex:1;min-width:140px;padding:14px 20px;background:transparent;border:none;color:#94a3b8;font-size:13px;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:all 0.4s ease;display:flex;align-items:center;justify-content:flex-start;gap:8px;border-right:1px solid rgba(100,116,139,0.1);position:relative;}
+        .section-tab:last-child{border-right:none;}
+        .section-tab:hover{background:rgba(6,182,212,0.05);color:#06b6d4;transform:translateY(-1px);}
+        .section-tab.active{background:rgba(6,182,212,0.1);color:#06b6d4;border-bottom:2px solid #06b6d4;}
+        .section-content-area{padding:24px;}
+        .section-content{display:none;opacity:0;transform:translateY(20px);}
+        .section-content.open{display:block;animation:fadeInUp 0.5s ease forwards;}
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        .section-content.closing{animation:fadeOutDown 0.3s ease forwards;}
+        @keyframes fadeOutDown{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(10px)}}
+        .glow-card{background:rgba(15,23,42,0.6);border:1px solid rgba(100,116,139,0.2);border-radius:12px;padding:20px;transition:all 0.4s ease;}
+        .glow-card:hover{border-color:rgba(6,182,212,0.3);box-shadow:0 0 20px rgba(6,182,212,0.1);transform:translateY(-2px);}
+        .timeline-item{position:relative;padding-left:40px;margin-bottom:24px;}
+        .timeline-item:last-child{margin-bottom:0;}
+        .timeline-dot{position:absolute;left:0;top:8px;width:20px;height:20px;border-radius:50%;background:rgba(6,182,212,0.2);border:2px solid #06b6d4;display:flex;align-items:center;justify-content:center;}
+        .timeline-dot-inner{width:8px;height:8px;border-radius:50%;background:#06b6d4;animation:pulse 2s ease-in-out infinite;}
+        .timeline-item::before{content:'';position:absolute;left:9px;top:28px;bottom:-24px;width:2px;background:linear-gradient(to bottom,rgba(6,182,212,0.3),transparent);}
+        .timeline-item:last-child::before{display:none;}
+        .skill-bar{position:relative;width:100%;height:6px;background:rgba(30,41,59,0.6);border-radius:3px;overflow:hidden;margin-top:8px;}
+        .skill-progress{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,#06b6d4,#8b5cf6);border-radius:3px;width:0;transition:width 1s ease-out;}
+        .download-btn{position:fixed;bottom:100px;right:24px;z-index:100;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#06b6d4,#8b5cf6);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(6,182,212,0.4);transition:all 0.3s ease;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}
+        .download-btn:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 8px 30px rgba(6,182,212,0.6);}
+        .fade-in{opacity:0;transform:translateY(20px);transition:all 0.6s ease;}
+        .fade-in.visible{opacity:1;transform:translateY(0);}
+        .terminal-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,8,16,0.95);backdrop-filter:blur(12px);border-top:1px solid rgba(6,182,212,0.2);box-shadow:0 -4px 20px rgba(0,0,0,0.3);max-height:350px;overflow-y:auto;}
+        .terminal-output{white-space:pre-wrap;word-break:break-word;color:#60a5fa;transition:opacity 0.4s ease,transform 0.4s ease;}
+        .terminal-cmd-text{transition:opacity 0.4s ease,transform 0.4s ease;}
+        .project-card{background:rgba(15,23,42,0.6);border:1px solid rgba(100,116,139,0.2);border-radius:12px;overflow:hidden;transition:all 0.4s cubic-bezier(0.4,0,0.2,1);height:100%;display:flex;flex-direction:column;}
+        .project-card:hover{border-color:rgba(6,182,212,0.4);transform:translateY(-6px);box-shadow:0 12px 40px rgba(6,182,212,0.2);}
+        .project-image{width:100%;height:160px;background:linear-gradient(135deg,rgba(6,182,212,0.2),rgba(139,92,246,0.2));display:flex;align-items:center;justify-content:center;font-size:48px;position:relative;}
+        .project-status-badge{position:absolute;top:12px;right:12px;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
+        .status-dev{background:rgba(251,191,36,0.2);color:#fbbf24;border:1px solid rgba(251,191,36,0.3);}
+        .status-planned{background:rgba(96,165,250,0.2);color:#60a5fa;border:1px solid rgba(96,165,250,0.3);}
+        .project-content{padding:20px;flex:1;display:flex;flex-direction:column;}
+        .project-tech-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:16px;}
+        .tech-tag{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:500;background:rgba(6,182,212,0.1);color:#06b6d4;border:1px solid rgba(6,182,212,0.2);}
+        .project-link{display:inline-flex;align-items:center;gap:6px;margin-top:12px;color:#06b6d4;text-decoration:none;font-size:13px;font-weight:500;transition:all 0.3s ease;}
+        .project-link:hover{color:#8b5cf6;gap:10px;}
+        .project-link.disabled{color:#64748b;cursor:not-allowed;opacity:0.6;}
+        .icon-enhanced{transition:all 0.3s ease;}
+        .icon-enhanced:hover{transform:scale(1.1);filter:drop-shadow(0 0 8px currentColor);}
+        @media(max-width:640px){.code-line{display:none}.avatar-container{width:100px;height:100px}.avatar{font-size:36px}.stat-number{font-size:28px}.download-btn{bottom:80px;right:20px;width:56px;height:56px}.terminal-bar{max-height:120px;font-size:11px}}
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}}
+    </style>
+</head>
+<body>
+    <div class="code-canvas">
+        <div class="matrix-grid"></div>
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+        <div id="codeCanvas"></div>
+    </div>
+
+    <nav class="navbar" id="navbar">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2"><span class="text-cyan-400 font-mono text-sm">iTude</span><span class="cursor"></span></div>
+                <div class="flex items-center gap-6 text-sm">
+                    <a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors">Sobre</a>
+                    <a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors">Experiência</a>
+                    <a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors">Skills</a>
+                    <a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors">Educação</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <button class="download-btn" onclick="downloadCV()" title="Download CV">
+        <i data-lucide="download" class="w-5 h-5 text-white"></i>
+        <span style="font-size:10px;font-weight:600;color:white;text-transform:uppercase">CV</span>
+    </button>
+
+    <div class="pb-24" style="position:relative;z-index:10;">
+
+        <!-- HERO -->
+        <section class="px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+            <div class="max-w-3xl mx-auto fade-in">
+                <div class="flex justify-center mb-8">
+                    <div class="avatar-container">
+                        <div class="avatar-ring"></div>
+                        <div class="avatar">
+                            <img src="https://igortude.github.io/foto.jpeg" alt="Igor Tude" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                        </div>
+                    </div>
+                </div>
+                <div class="font-mono text-sm text-emerald-400 mb-4 flex items-center justify-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 pulse"></span>status: disponível
+                </div>
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-3 text-center">Igor Tude</h1>
+                <p class="text-xl sm:text-2xl text-cyan-400 font-semibold mb-6 text-center">Data Scientist & Desenvolvedor de Sistemas</p>
+                <div class="text-slate-300 text-center leading-relaxed max-w-2xl mx-auto mb-10 text-base sm:text-lg">
+                    Transformando dados em decisões e ideias em sistemas. 
+                    <span class="text-amber-400 font-semibold">Python</span>, 
+                    <span class="text-blue-400 font-semibold">SQL</span>, 
+                    <span class="text-violet-400 font-semibold">Machine Learning</span> e 
+                    <span class="text-emerald-400 font-semibold">desenvolvimento multiplataforma</span>.
+                </div>
+                <div class="flex flex-wrap justify-center gap-4 text-sm mb-12">
+                    <a href="mailto:igortude@hotmail.com" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 border border-cyan-500/20 transition-all" data-cmd="echo $EMAIL" data-out="igortude@hotmail.com">
+                        <i data-lucide="mail" class="w-5 h-5 icon-enhanced"></i>Email
+                    </a>
+                    <a href="https://www.linkedin.com/in/igor-tude-309480299/" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20 transition-all" data-cmd="open linkedin" data-out="linkedin.com/in/igor-tude-309480299" target="_blank" rel="noopener noreferrer">
+                        <i data-lucide="linkedin" class="w-5 h-5 icon-enhanced"></i>LinkedIn
+                    </a>
+                    <a href="https://github.com/igortude" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-500/10 text-slate-300 hover:bg-slate-500/20 border border-slate-500/20 transition-all" data-cmd="git remote -v" data-out="github.com/igortude" target="_blank" rel="noopener noreferrer">
+                        <i data-lucide="github" class="w-5 h-5 icon-enhanced"></i>GitHub
+                    </a>
+                    <span class="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" data-cmd="geolocate" data-out="Belo Horizonte, Brasil">
+                        <i data-lucide="map-pin" class="w-5 h-5 icon-enhanced"></i>BH, Brasil
+                    </span>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
+                    <div class="stat-card"><div class="stat-number" data-target="3">0</div><div class="text-slate-400 text-xs mt-1">Anos Exp.</div></div>
+                    <div class="stat-card"><div class="stat-number" data-target="15">0</div><div class="text-slate-400 text-xs mt-1">Projetos</div></div>
+                    <div class="stat-card"><div class="stat-number" data-target="20">0</div><div class="text-slate-400 text-xs mt-1">% Redução Churn</div></div>
+                    <div class="stat-card"><div class="stat-number" data-target="70">0</div><div class="text-slate-400 text-xs mt-1">% Automação</div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CV SECTIONS -->
+        <section class="px-4 sm:px-6 lg:px-8 mb-20">
+            <div class="max-w-3xl mx-auto fade-in">
+                <div class="cv-sections-container">
+                    <div class="cv-sections-tabs">
+                        <button class="section-tab" data-section="sobre" data-cmd="cat sobre.txt" data-out="Lendo perfil..." onclick="switchTab(this)">
+                            <i data-lucide="user" class="w-4 h-4"></i>sobre.txt
+                        </button>
+                        <button class="section-tab" data-section="experiencia" data-cmd="git log --oneline" data-out="Listando commits..." onclick="switchTab(this)">
+                            <i data-lucide="briefcase" class="w-4 h-4"></i>experiencia.log
+                        </button>
+                        <button class="section-tab" data-section="projetos" data-cmd="ls -la ~/projects" data-out="Listando projetos..." onclick="switchTab(this)">
+                            <i data-lucide="folder-git-2" class="w-4 h-4"></i>projetos/
+                        </button>
+                        <button class="section-tab" data-section="skills" data-cmd="cat skills.json" data-out="Parsing competências..." onclick="switchTab(this)">
+                            <i data-lucide="code-2" class="w-4 h-4"></i>skills.json
+                        </button>
+                        <button class="section-tab" data-section="educacao" data-cmd="cat educacao.yaml" data-out="Carregando formação..." onclick="switchTab(this)">
+                            <i data-lucide="graduation-cap" class="w-4 h-4"></i>educacao.yaml
+                        </button>
+                    </div>
+
+                    <div class="section-content-area">
+
+                        <!-- SOBRE -->
+                        <div id="section-sobre" class="section-content">
+                            <div class="glow-card">
+                                <div class="text-slate-300 text-sm leading-relaxed space-y-4">
+                                    <p>Formado em <span class="text-amber-400 font-medium">Direito</span> e <span class="text-emerald-400 font-medium">Educação Física</span>, em transição para <span class="text-cyan-400 font-medium">Ciência de Dados</span>. O raciocínio analítico do Direito e a visão orientada a resultados da Educação Física formam uma base diferente de quem veio direto da TI — e isso aparece na forma de encarar problemas.</p>
+                                    <p>Como freelancer, desenvolveu o site institucional e o sistema de gestão completo da CT No Limits em Python — versões para <span class="text-amber-400 font-medium">Windows e macOS</span> — com módulos de alunos, agendamentos, cursos e check-in. Código comercializado. Tem também background em TI com experiência em servidores, banco de dados e PHP.</p>
+                                    <div class="flex flex-wrap gap-2 pt-2">
+                                        <span class="px-3 py-1 text-xs rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Transição de Carreira</span>
+                                        <span class="px-3 py-1 text-xs rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">Freelancer Dev</span>
+                                        <span class="px-3 py-1 text-xs rounded-full bg-violet-500/10 text-violet-400 border border-violet-500/20">Python & Dados</span>
+                                        <span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Multiplataforma</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- EXPERIENCIA -->
+                        <div id="section-experiencia" class="section-content">
+
+                            <!-- Freelancer -->
+                            <div class="timeline-item">
+                                <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
+                                <div class="glow-card" style="cursor:pointer;" onclick="lockQuery(this)"
+                                    data-cmd="cat freelance_projetos.py"
+                                    data-out="# Projetos Freelance — Desenvolvimento & Dados
+projetos = {
+    'site_ctnolimits': {
+        'tipo': 'Web',
+        'stack': ['HTML', 'CSS', 'JavaScript'],
+        'status': 'Entregue e no ar'
+    },
+    'sistema_gestao': {
+        'tipo': 'Desktop App',
+        'stack': ['Python', 'SQLite'],
+        'plataformas': ['Windows', 'macOS'],
+        'modulos': ['alunos','agendamentos','cursos','checkin'],
+        'status': 'Comercializado'
+    }
+}">
+                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3">
+                                        <div>
+                                            <h3 class="text-white font-semibold text-lg">Freelancer — Desenvolvimento & Dados</h3>
+                                            <p class="text-cyan-400 text-sm">Projetos independentes</p>
+                                        </div>
+                                        <span class="text-xs text-slate-400 font-mono bg-slate-800/50 px-3 py-1 rounded-full mt-2 sm:mt-0">2024 – Presente</span>
+                                    </div>
+                                    <ul class="text-slate-300 text-sm space-y-2">
+                                        <li class="flex items-start gap-2"><i data-lucide="chevron-right" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0"></i><span>Desenvolvimento completo do site institucional da <a href="https://www.ctnolimits.com.br" target="_blank" class="text-cyan-400 hover:underline">CT No Limits</a> — front-end, back-end e design responsivo</span></li>
+                                        <li class="flex items-start gap-2"><i data-lucide="chevron-right" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0"></i><span>Sistema de gestão em Python com módulos de controle de alunos, agendamentos, cursos e check-in de professores — versões Windows e macOS</span></li>
+                                        <li class="flex items-start gap-2"><i data-lucide="chevron-right" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0"></i><span>Código do sistema comercializado e de propriedade exclusiva do cliente</span></li>
+                                        <li class="flex items-start gap-2"><i data-lucide="chevron-right" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0"></i><span>Dashboard analítico em Streamlit com dados reais de negócio (em desenvolvimento)</span></li>
+                                    </ul>
+                                    <div class="mt-3 flex flex-wrap gap-2">
+                                        <span class="px-2 py-1 text-xs rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">Python</span>
+                                        <span class="px-2 py-1 text-xs rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">HTML/CSS/JS</span>
+                                        <span class="px-2 py-1 text-xs rounded-full bg-violet-500/10 text-violet-400 border border-violet-500/20">SQLite</span>
+                                        <span class="px-2 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Streamlit</span>
+                                        <span class="px-2 py-1 text-xs rounded-full bg-slate-500/10 text-slate-400 border border-slate-500/20">Desktop App</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Kirzner -->
+                            <div class="timeline-item">
+                                <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
+                                <div class="glow-card" style="cursor:pointer;" onclick="lockQuery(this)"
+                                    data-cmd="cat suporte_kirzner.php"
+                                    data-out="<?php
+// Gestão de banco de dados e integração com servidores
+$pdo = new PDO('mysql:host=servidor;dbname=app', $user, $pass);
+$stmt = $pdo->prepare(
+    'SELECT id, nome, status
+     FROM clientes
+     WHERE ativo = 1
+     ORDER BY nome ASC'
+);
+$stmt->execute();
+$clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>">
+                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3">
+                                        <div>
+                                            <h3 class="text-white font-semibold text-lg">Analista de Suporte (TI)</h3>
+                                            <a href="https://www.kirznerdobrasil.com.br" target="_blank" rel="noopener noreferrer" class="text-cyan-400 text-sm hover:text-cyan-300 transition-colors inline-flex items-center gap-1">
+                                                Kirzner do Brasil <i data-lucide="external-link" class="w-3 h-3"></i>
+                                            </a>
+                                        </div>
+                                        <span class="text-xs text-slate-400 font-mono bg-slate-800/50 px-3 py-1 rounded-full mt-2 sm:mt-0">Anterior</span>
+                                    </div>
+                                    <ul class="text-slate-300 text-sm space-y-2">
+                                        <li class="flex items-start gap-2"><i data-lucide="chevron-right" class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0"></i><span>Gestão e comunicação com equipe técnica da Small Orange para administração de servidores de hospedagem</span></li>
+                                        <li class="flex items-start gap-2"><i data-lucide="chevron-right" class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0"></i><span>Manutenção e manipulação de banco de dados de aplicações web</span></li>
+                                        <li class="flex items-start gap-2"><i data-lucide="chevron-right" class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0"></i><span>Desenvolvimento e manutenção de funcionalidades em PHP</span></li>
+                                        <li class="flex items-start gap-2"><i data-lucide="chevron-right" class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0"></i><span>Atendimento e suporte técnico a clientes</span></li>
+                                    </ul>
+                                    <div class="mt-3 flex flex-wrap gap-2">
+                                        <span class="px-2 py-1 text-xs rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/20">PHP</span>
+                                        <span class="px-2 py-1 text-xs rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">MySQL</span>
+                                        <span class="px-2 py-1 text-xs rounded-full bg-slate-500/10 text-slate-400 border border-slate-500/20">Servidores</span>
+                                        <span class="px-2 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Suporte Técnico</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- PROJETOS -->
+                        <div id="section-projetos" class="section-content">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                <!-- ✅ PROJETO REAL: Site CT No Limits -->
+                                <div class="project-card" data-cmd="git log --oneline ctnolimits.com.br" data-out="a3f1c2e feat: deploy site institucional
+b7d9e01 feat: sistema de contato e formulários
+c2a8f3d feat: layout responsivo mobile-first
+d1e5b7c feat: página de cursos e landing page
+e9c3a2f init: estrutura do projeto">
+                                    <div class="project-image" style="background: linear-gradient(135deg, rgba(6,182,212,0.25), rgba(16,185,129,0.15));">
+                                        <span class="project-status-badge" style="background:rgba(16,185,129,0.2);color:#10b981;border:1px solid rgba(16,185,129,0.3);">✅ Entregue</span>
+                                        <i data-lucide="globe" class="text-emerald-400" style="width:48px;height:48px;"></i>
+                                    </div>
+                                    <div class="project-content">
+                                        <h3 class="text-white font-semibold text-lg mb-2">Site Institucional — CT No Limits</h3>
+                                        <p class="text-slate-400 text-sm mb-3 leading-relaxed">Desenvolvimento completo do site institucional da CT No Limits. Front-end e back-end, design responsivo, páginas de cursos e landing page.</p>
+                                        <div class="project-tech-tags">
+                                            <span class="tech-tag">HTML/CSS</span><span class="tech-tag">JavaScript</span><span class="tech-tag">Responsivo</span><span class="tech-tag">Front-end</span><span class="tech-tag">Back-end</span>
+                                        </div>
+                                        <a href="https://www.ctnolimits.com.br" class="project-link" target="_blank" rel="noopener noreferrer">
+                                            <i data-lucide="external-link" class="w-4 h-4"></i><span>Ver site ao vivo</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- ✅ PROJETO REAL: Sistema de Gestão -->
+                                <div class="project-card" data-cmd="cat sistema_gestao/README.md" data-out="# Sistema de Gestão CT No Limits
+## Módulos
+- Controle de alunos (cadastro, histórico)
+- Agendamentos e calendário
+- Gestão de cursos internos
+- Check-in de professores
+- Relatórios e dashboards
+
+## Plataformas
+- Windows (executável .exe)
+- macOS (app nativo)
+
+## Status: COMERCIALIZADO
+Código de propriedade exclusiva do cliente.">
+                                    <div class="project-image" style="background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(251,191,36,0.1));">
+                                        <span class="project-status-badge" style="background:rgba(251,191,36,0.2);color:#f59e0b;border:1px solid rgba(251,191,36,0.4);">🔒 Comercializado</span>
+                                        <i data-lucide="layout-dashboard" class="text-violet-400" style="width:48px;height:48px;"></i>
+                                    </div>
+                                    <div class="project-content">
+                                        <h3 class="text-white font-semibold text-lg mb-2">Sistema de Gestão — CT No Limits</h3>
+                                        <p class="text-slate-400 text-sm mb-3 leading-relaxed">Sistema completo desenvolvido em Python: controle de alunos, agendamentos, cursos, check-in de professores. Entregue em versões para <span class="text-amber-400">Windows</span> e <span class="text-slate-300">macOS</span>. Código vendido ao cliente.</p>
+                                        <div class="project-tech-tags">
+                                            <span class="tech-tag">Python</span><span class="tech-tag">Windows</span><span class="tech-tag">macOS</span><span class="tech-tag">Desktop App</span><span class="tech-tag">SQLite</span>
+                                        </div>
+                                        <span class="project-link disabled" style="cursor:default;margin-top:12px;">
+                                            <i data-lucide="lock" class="w-4 h-4"></i><span>Código Proprietário</span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Dashboard RAG -->
+                                <div class="project-card" data-cmd="ls projects/dashboard-rag/" data-out="README.md  app.py  data/  models/  requirements.txt">
+                                    <div class="project-image"><span class="project-status-badge status-dev">🟡 Em Desenvolvimento</span><i data-lucide="bar-chart-3" class="text-cyan-400" style="width:48px;height:48px;"></i></div>
+                                    <div class="project-content">
+                                        <h3 class="text-white font-semibold text-lg mb-2">Dashboard BI + RAG</h3>
+                                        <p class="text-slate-400 text-sm mb-3 leading-relaxed">Dashboard interativo com agente de IA que responde perguntas sobre o negócio. Implementação de RAG usando Langchain e Llama local.</p>
+                                        <div class="project-tech-tags"><span class="tech-tag">Streamlit</span><span class="tech-tag">Plotly</span><span class="tech-tag">Langchain</span><span class="tech-tag">Llama 3.2</span><span class="tech-tag">SQLite</span></div>
+                                        <a href="#" class="project-link disabled"><i data-lucide="github" class="w-4 h-4"></i><span>Em breve</span></a>
+                                    </div>
+                                </div>
+
+                                <!-- CRUD Python -->
+                                <div class="project-card" data-cmd="python main.py" data-out="=== Sistema de Cadastro ===
+[1] Cadastrar usuário
+[2] Listar usuários
+[3] Editar cadastro
+[4] Excluir por ID
+[5] Relatórios + gráficos
+[0] Sair
+
+100% funcional. Feito do zero.">
+                                    <div class="project-image" style="background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(6,182,212,0.15));">
+                                        <span class="project-status-badge" style="background:rgba(16,185,129,0.2);color:#10b981;border:1px solid rgba(16,185,129,0.3);">✅ Concluído</span>
+                                        <i data-lucide="database" class="text-emerald-400" style="width:48px;height:48px;"></i>
+                                    </div>
+                                    <div class="project-content">
+                                        <h3 class="text-white font-semibold text-lg mb-2">Sistema CRUD Python</h3>
+                                        <p class="text-slate-400 text-sm mb-3 leading-relaxed">CRUD completo com SQLite, feito 100% do zero no 1º semestre. Cadastro com validações, edição, exclusão por ID, relatórios com Pandas e gráficos.</p>
+                                        <div class="project-tech-tags">
+                                            <span class="tech-tag">Python</span><span class="tech-tag">SQLite</span><span class="tech-tag">Pandas</span><span class="tech-tag">CLI</span>
+                                        </div>
+                                        <a href="https://github.com/igortude/sistema-cadastro" class="project-link" target="_blank" rel="noopener noreferrer">
+                                            <i data-lucide="github" class="w-4 h-4"></i><span>Ver no GitHub</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="mt-8 p-6 rounded-lg bg-cyan-500/5 border border-cyan-500/20">
+                                <div class="flex items-start gap-4">
+                                    <i data-lucide="lightbulb" class="w-6 h-6 text-cyan-400 flex-shrink-0 mt-1"></i>
+                                    <p class="text-slate-300 text-sm leading-relaxed"><span class="text-cyan-400 font-semibold">Código proprietário não é ausência de portfólio</span> — significa que alguém pagou pelo trabalho. Os projetos com 🔒 foram comercializados e pertencem aos clientes.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SKILLS -->
+                        <div id="section-skills" class="section-content">
+                            <div class="space-y-6">
+                                <div class="glow-card">
+                                    <p class="text-xs text-cyan-400 mb-4 font-mono flex items-center gap-2"><i data-lucide="code" class="w-3 h-3"></i>// linguagens de programação</p>
+                                    <div class="space-y-4">
+                                        <div><div class="flex justify-between items-center mb-2"><span class="text-sm text-slate-200 font-medium">Python</span><span class="text-xs text-slate-400 font-mono">85%</span></div><div class="skill-bar"><div class="skill-progress" data-progress="85"></div></div></div>
+                                        <div><div class="flex justify-between items-center mb-2"><span class="text-sm text-slate-200 font-medium">SQL</span><span class="text-xs text-slate-400 font-mono">80%</span></div><div class="skill-bar"><div class="skill-progress" data-progress="80"></div></div></div>
+                                        <div><div class="flex justify-between items-center mb-2"><span class="text-sm text-slate-200 font-medium">PHP</span><span class="text-xs text-slate-400 font-mono">55%</span></div><div class="skill-bar"><div class="skill-progress" data-progress="55"></div></div></div>
+                                        <div><div class="flex justify-between items-center mb-2"><span class="text-sm text-slate-200 font-medium">JavaScript</span><span class="text-xs text-slate-400 font-mono">60%</span></div><div class="skill-bar"><div class="skill-progress" data-progress="60"></div></div></div>
+                                        <div><div class="flex justify-between items-center mb-2"><span class="text-sm text-slate-200 font-medium">HTML/CSS</span><span class="text-xs text-slate-400 font-mono">70%</span></div><div class="skill-bar"><div class="skill-progress" data-progress="70"></div></div></div>
+                                        <div><div class="flex justify-between items-center mb-2"><span class="text-sm text-slate-200 font-medium">DAX (Básico)</span><span class="text-xs text-slate-400 font-mono">45%</span></div><div class="skill-bar"><div class="skill-progress" data-progress="45"></div></div></div>
+                                    </div>
+                                </div>
+                                <div class="glow-card">
+                                    <p class="text-xs text-violet-400 mb-4 font-mono flex items-center gap-2"><i data-lucide="brain" class="w-3 h-3"></i>// bibliotecas python</p>
+                                    <div class="flex flex-wrap gap-3">
+                                        <span class="px-3 py-2 text-sm rounded-lg bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 cursor-pointer">Pandas</span>
+                                        <span class="px-3 py-2 text-sm rounded-lg bg-amber-500/10 text-amber-300 border border-amber-500/20 cursor-pointer">Streamlit</span>
+                                        <span class="px-3 py-2 text-sm rounded-lg bg-orange-500/10 text-orange-300 border border-orange-500/20 cursor-pointer">NumPy</span>
+                                        <span class="px-3 py-2 text-sm rounded-lg bg-blue-500/10 text-blue-300 border border-blue-500/20 cursor-pointer">Matplotlib</span>
+                                        <span class="px-3 py-2 text-sm rounded-lg bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 cursor-pointer">Seaborn</span>
+                                    </div>
+                                </div>
+                                <div class="glow-card">
+                                    <p class="text-xs text-orange-400 mb-4 font-mono flex items-center gap-2"><i data-lucide="monitor" class="w-3 h-3"></i>// desenvolvimento de sistemas</p>
+                                    <div class="flex flex-wrap gap-3">
+                                        <span class="px-3 py-2 text-sm rounded-lg bg-violet-500/10 text-violet-300 border border-violet-500/20 cursor-pointer">Desktop App (Python)</span>
+                                        <span class="px-3 py-2 text-sm rounded-lg bg-amber-500/10 text-amber-300 border border-amber-500/20 cursor-pointer">Windows</span>
+                                        <span class="px-3 py-2 text-sm rounded-lg bg-slate-500/10 text-slate-300 border border-slate-500/20 cursor-pointer">macOS</span>
+                                        <span class="px-3 py-2 text-sm rounded-lg bg-orange-500/10 text-orange-300 border border-orange-500/20 cursor-pointer">PHP</span>
+                                        <span class="px-3 py-2 text-sm rounded-lg bg-blue-500/10 text-blue-300 border border-blue-500/20 cursor-pointer">MySQL</span>
+                                        <span class="px-3 py-2 text-sm rounded-lg bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 cursor-pointer">SQLite</span>
+                                    </div>
+                                </div>
+                                <div class="glow-card">
+                                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                        <div class="flex items-center gap-2 text-sm text-slate-300 hover:text-cyan-400 transition-colors cursor-pointer"><i data-lucide="database" class="w-5 h-5 text-blue-400"></i>Power BI</div>
+                                        <div class="flex items-center gap-2 text-sm text-slate-300 hover:text-cyan-400 transition-colors cursor-pointer"><i data-lucide="git-branch" class="w-5 h-5 text-orange-400"></i>Git/GitHub</div>
+                                        <div class="flex items-center gap-2 text-sm text-slate-300 hover:text-cyan-400 transition-colors cursor-pointer"><i data-lucide="table" class="w-5 h-5 text-emerald-400"></i>Excel</div>
+                                        <div class="flex items-center gap-2 text-sm text-slate-300 hover:text-cyan-400 transition-colors cursor-pointer"><i data-lucide="code-2" class="w-5 h-5 text-violet-400"></i>VS Code</div>
+                                        <div class="flex items-center gap-2 text-sm text-slate-300 hover:text-cyan-400 transition-colors cursor-pointer"><i data-lucide="server" class="w-5 h-5 text-orange-400"></i>PHP / MySQL</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- EDUCACAO -->
+                        <div id="section-educacao" class="section-content">
+                            <div class="space-y-4">
+                                <div class="glow-card">
+                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
+                                        <div><h3 class="text-white font-semibold">Tecnólogo em Ciência de Dados</h3><p class="text-cyan-400 text-sm">Universidade Anhanguera</p></div>
+                                        <span class="text-xs text-slate-400 font-mono bg-slate-800/50 px-3 py-1 rounded-full mt-2 sm:mt-0">2024-2028</span>
+                                    </div>
+                                    <p class="text-slate-400 text-xs mt-2">Formação focada em análise de dados, machine learning e business intelligence</p>
+                                </div>
+                                <div class="glow-card">
+                                    <p class="text-xs text-slate-500 mb-3 font-mono flex items-center gap-2"><i data-lucide="layers" class="w-3 h-3"></i>// formações anteriores</p>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center justify-between">
+                                            <div><p class="text-sm text-slate-300 font-medium">Bacharelado em Direito</p><p class="text-xs text-slate-500">Concluído</p></div>
+                                            <span class="px-2 py-1 text-xs rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">Raciocínio Analítico</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <div><p class="text-sm text-slate-300 font-medium">Bacharelado em Educação Física</p><p class="text-xs text-slate-500">Concluído</p></div>
+                                            <span class="px-2 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Orientado a Resultados</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="glow-card">
+                                    <p class="text-xs text-amber-400 mb-4 font-mono flex items-center gap-2"><i data-lucide="award" class="w-3 h-3"></i>// certificações & cursos</p>
+                                    <div class="space-y-3">
+                                        <div class="flex items-start gap-3 group"><div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="trophy" class="w-4 h-4 text-amber-400"></i></div><div><p class="text-sm text-slate-200 font-medium">Análise de Dados e Inteligência de Negócios</p><p class="text-xs text-slate-400">GranFaculdades</p></div></div>
+                                        <div class="flex items-start gap-3 group"><div class="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="trophy" class="w-4 h-4 text-blue-400"></i></div><div><p class="text-sm text-slate-200 font-medium">Introdução a Ciência de Dados</p><p class="text-xs text-slate-400">FGV</p></div></div>
+                                        <div class="flex items-start gap-3 group"><div class="w-8 h-8 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="trophy" class="w-4 h-4 text-violet-400"></i></div><div><p class="text-sm text-slate-200 font-medium">Introdução ao Machine Learning com Python</p><p class="text-xs text-slate-400">USP/ESALQ</p></div></div>
+                                        <div class="flex items-start gap-3 group"><div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="trophy" class="w-4 h-4 text-cyan-400"></i></div><div><p class="text-sm text-slate-200 font-medium">Formação em Ciência de Dados</p><p class="text-xs text-slate-400">Data Science Academy</p></div></div>
+                                        <div class="flex items-start gap-3 group"><div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="trophy" class="w-4 h-4 text-emerald-400"></i></div><div><p class="text-sm text-slate-200 font-medium">SQL para Dados • Python para Dados • Estatística Básica</p><p class="text-xs text-slate-400">TeoMeWhy</p></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- TERMINAL -->
+    <div class="terminal-bar">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 py-3">
+            <div class="flex items-start gap-3 font-mono text-xs">
+                <span class="text-emerald-400 flex-shrink-0">➜</span>
+                <div class="flex-1 overflow-x-auto">
+                    <div class="terminal-cmd-text text-slate-300 mb-1" id="terminal-cmd">make run</div>
+                    <div class="terminal-output" id="terminal-out">Clique nos arquivos para expandir. Clique nos cards de experiência para ver código.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let terminalCmd=null,terminalOut=null,queryLocked=false,lockedQuery={cmd:'',out:''};
+        const defaultState={cmd:'make run',out:'Clique nos arquivos para expandir. Clique nos cards de experiência para ver código.'};
+
+        function initBackground(){
+            const canvas=document.getElementById('codeCanvas');
+            const snippets=["def train_model(X, y):","SELECT * FROM users WHERE","import pandas as pd","model.fit(X_train, y_train)","GROUP BY date ORDER BY","np.random.seed(42)","df.groupby('category').agg()","model.predict(X_test)","plt.plot(x, y)","y = mx + b","P(A|B) = P(B|A)P(A)/P(B)"];
+            const colors=['code-python','code-sql','code-stats','code-ml','code-formula'];
+            function createLine(){const line=document.createElement('div');line.className=`code-line ${colors[Math.floor(Math.random()*colors.length)]}`;line.textContent=snippets[Math.floor(Math.random()*snippets.length)];line.style.left=Math.random()*100+'%';line.style.animationDuration=(15+Math.random()*10)+'s';line.style.animationDelay=Math.random()*5+'s';canvas.appendChild(line);setTimeout(()=>line.remove(),25000);}
+            for(let i=0;i<8;i++)setTimeout(createLine,i*1000);
+            setInterval(createLine,3000);
+        }
+
+        window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('visible',window.scrollY>100);});
+
+        function animateStats(){document.querySelectorAll('.stat-number').forEach(stat=>{const target=parseInt(stat.dataset.target);let current=0;const inc=target/50;const t=setInterval(()=>{current+=inc;if(current>=target){stat.textContent=target;clearInterval(t);}else{stat.textContent=Math.floor(current);}},30);});}
+
+        function animateSkills(){document.querySelectorAll('.skill-progress').forEach(bar=>{setTimeout(()=>{bar.style.width=bar.dataset.progress+'%';},100);});}
+
+        function updateTerminal(cmd,out){
+            if(!terminalCmd||!terminalOut||queryLocked)return;
+            terminalCmd.style.opacity='0';terminalOut.style.opacity='0';
+            setTimeout(()=>{terminalCmd.textContent=cmd;terminalOut.textContent=out;terminalCmd.style.opacity='1';terminalOut.style.opacity='1';},400);
+        }
+
+        function lockQuery(el){
+            const cmd=el.dataset.cmd,out=el.dataset.out;
+            if(queryLocked&&lockedQuery.cmd===cmd){
+                queryLocked=false;lockedQuery={cmd:'',out:''};el.style.boxShadow='';
+                setTimeout(()=>{queryLocked=false;updateTerminal(defaultState.cmd,defaultState.out);},10);
+            }else{
+                queryLocked=true;lockedQuery={cmd,out};
+                document.querySelectorAll('.glow-card[data-cmd]').forEach(c=>c.style.boxShadow='');
+                el.style.boxShadow='0 0 20px rgba(6,182,212,0.4)';
+                terminalCmd.textContent=cmd;terminalOut.textContent=out;
+            }
+        }
+
+        function switchTab(tab){
+            const sn=tab.dataset.section,isActive=tab.classList.contains('active'),tc=document.getElementById('section-'+sn);
+            if(isActive){
+                tab.classList.remove('active');
+                if(tc){tc.classList.add('closing');setTimeout(()=>tc.classList.remove('open','closing'),300);}
+                updateTerminal(defaultState.cmd,defaultState.out);
+            }else{
+                document.querySelectorAll('.section-content.open').forEach(c=>c.classList.add('closing'));
+                document.querySelectorAll('.section-tab').forEach(t=>t.classList.remove('active'));
+                tab.classList.add('active');
+                setTimeout(()=>{
+                    document.querySelectorAll('.section-content').forEach(c=>c.classList.remove('open','closing'));
+                    if(tc){requestAnimationFrame(()=>{tc.classList.add('open');if(sn==='skills')setTimeout(animateSkills,200);if(typeof lucide!=='undefined')setTimeout(()=>lucide.createIcons(),100);});}
+                },300);
+                setTimeout(()=>updateTerminal(tab.dataset.cmd,'[OK] Arquivo carregado com sucesso'),150);
+            }
+        }
+
+        function initReveal(){
+            const obs=new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*100);});},{threshold:0.1});
+            document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+        }
+
+        function downloadCV(){
+            updateTerminal('wget igor-tude-cv.pdf','Downloading CV... [████████████] 100%');
+            setTimeout(()=>{
+                const a=document.createElement('a');
+                a.href='https://github.com/igortude/igortude.github.io/raw/main/CV.pdf';
+                a.target='_blank';
+                a.click();
+                queryLocked=false;
+                updateTerminal(defaultState.cmd,defaultState.out);
+            },800);
+        }
+
+        document.addEventListener('DOMContentLoaded',()=>{
+            function tryLucide(){if(typeof lucide!=='undefined')lucide.createIcons();else setTimeout(tryLucide,100);}
+            tryLucide();setTimeout(()=>{if(typeof lucide!=='undefined')lucide.createIcons();},500);
+            terminalCmd=document.getElementById('terminal-cmd');
+            terminalOut=document.getElementById('terminal-out');
+            document.querySelectorAll('[data-cmd]').forEach(el=>{
+                el.addEventListener('mouseenter',()=>updateTerminal(el.dataset.cmd,el.dataset.out));
+                el.addEventListener('mouseleave',()=>updateTerminal(defaultState.cmd,defaultState.out));
+            });
+            initBackground();initReveal();
+            const so=new IntersectionObserver((e)=>{e.forEach(en=>{if(en.isIntersecting){animateStats();so.disconnect();}});},{threshold:0.5});
+            const sc=document.querySelector('.stat-card');if(sc)so.observe(sc);
+        });
+        window.addEventListener('load',()=>{if(typeof lucide!=='undefined')lucide.createIcons();});
+    </script>
+</body>
+</html>
